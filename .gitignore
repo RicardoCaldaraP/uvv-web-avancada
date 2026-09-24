@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários
+*.tmp
+*.log
+site.rar
+
+# PDFs originais (materiais didáticos com possível copyright — remova esta linha se quiser incluí-los)
+Unidade_*.pdf
