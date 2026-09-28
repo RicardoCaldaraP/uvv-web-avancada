@@ -155,15 +155,26 @@
 
     const container = $('#slideContainer');
     container.innerHTML = '';
-    container.className = 'slide' + (slide.type === 'title' ? ' title-slide' : '');
+    let classes = 'slide';
+    if (slide.type === 'title') classes += ' title-slide';
+    if (slide.interactive) classes += ' interactive-slide-wrap';
+    container.className = classes;
 
-    const inner = el('div', { className: 'slide-inner' });
+    const inner = el('div', { className: 'slide-inner' + (slide.interactive ? ' interactive-slide' : '') });
     if (slide.kicker) inner.appendChild(el('div', { className: 'slide-kicker', html: slide.kicker }));
     if (slide.title) inner.appendChild(el('h2', { className: 'slide-title', html: slide.title }));
     if (slide.illustration) inner.appendChild(el('div', { className: 'slide-illustration', html: slide.illustration }));
     if (slide.body) inner.appendChild(el('div', { className: 'slide-body', html: slide.body }));
     if (slide.code) inner.appendChild(el('div', { html: py(slide.code) }));
     if (slide.html) inner.appendChild(el('div', { html: slide.html }));
+
+    // slide interativo — chama o handler apropriado
+    if (slide.interactive && INTERACTIVE[slide.interactive]) {
+      const box = el('div', { className: 'itv-container' });
+      inner.appendChild(box);
+      INTERACTIVE[slide.interactive](box);
+    }
+
     if (slide.note) {
       const cls = 'slide-note' + (slide.noteType ? ' ' + slide.noteType : '');
       inner.appendChild(el('div', { className: cls, html: slide.note }));

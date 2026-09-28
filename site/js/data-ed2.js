@@ -965,6 +965,12 @@ int soma(int v[], int n) {
         </ul>`,
         note:'Cuidado com problemas onde <em>subchamadas se repetem</em> — fibonacci recursivo é exponencial. Nesses casos, use memoização ou versão iterativa.' },
 
+      /* --------- SLIDE INTERATIVO --------- */
+      { title:'🎮 Pilha em ação: comum vs cauda',
+        interactive: 'recursion',
+        body:'Escolha um valor de <strong>n</strong> e alterne entre os dois modos. Veja a diferença visual: recursão comum <strong>empilha</strong> vários frames; recursão de cauda usa <strong>um frame só</strong>, com os parâmetros atualizando a cada chamada.',
+        note:'Perceba como no modo comum, aumentar n faz a pilha crescer visualmente. No modo cauda, o frame único fica igual — é o que permite o compilador otimizar para um loop.' },
+
       /* --------- Bateria de exemplos de identificação --------- */
       { title:'Bateria: é cauda ou não é?', illustration: SVG.identifica_cauda,
         body:'A pergunta mental é sempre a mesma: <strong>depois que a chamada recursiva retorna, sobra algum trabalho pra fazer antes do return?</strong>',
@@ -1108,6 +1114,12 @@ onde:
           <li>Quando heap zera na run atual, começa nova run</li>
         </ul>`,
         note:'Em média gera runs de tamanho <strong>2m</strong> — metade das passadas de intercalação.' },
+
+      /* --------- SLIDE INTERATIVO --------- */
+      { title:'🎮 Calculadora interativa de passadas',
+        interactive: 'extsort',
+        body:'Mexe nos sliders de <strong>N</strong> (registros), <strong>m</strong> (RAM) e <strong>f</strong> (caminhos) e veja como o número de passadas muda. Liga a seleção por substituição pra ver o impacto.',
+        note:'Experimenta: fixa N e m, aumenta f. Depois fixa f e aumenta m. Perceba onde a redução de uma passada acontece.' },
 
       /* --------- Exemplos numéricos --------- */
       { title:'Praticando a fórmula — exemplo 1',
@@ -1472,6 +1484,12 @@ raiz:      [30, 50, 60]
 - A folha que estava cheia foi dividida em duas
 - Todas as folhas continuam no mesmo nível (invariante da árvore B)`,
         note:'Resposta da prova: raiz vira <strong>[30, 50, 60]</strong>. Esta é uma das opções mais comuns em provas com árvore B ordem 4.' },
+
+      /* --------- SLIDE INTERATIVO --------- */
+      { title:'🎮 Construa sua própria Árvore B',
+        interactive: 'btree',
+        body:'Escolha a ordem, insira chaves e veja a árvore montar em tempo real. O histórico embaixo mostra cada split e promoção acontecendo. Troca pra <strong>modo letras</strong> pra treinar com A-Z também.',
+        note:'Dica: use o botão "Exemplo pré-pronto" pra ver uma sequência longa aparecer de uma vez. E o "🎲 Aleatório" pra testar chaves imprevisíveis.' },
 
       { title:'Qual chave é o "meio"?',
         body:'Existe uma pequena variação entre livros sobre qual chave promover. As duas convenções mais comuns:',
