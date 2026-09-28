@@ -1,27 +1,39 @@
-# Programação Web Avançada — UVV
+# UVV — Estudos
 
-Site de estudos da matéria de Desenvolvimento de Sistemas para Web na UVV.
+Site multi-matéria de estudos.
 
 **Acesse:** [https://ricardocaldarap.github.io/uvv-web-avancada/](https://ricardocaldarap.github.io/uvv-web-avancada/)
 
-## O que tem aqui
+## Matérias incluídas
 
-- **6 aulas** em formato de slides (fullscreen, uma ideia por tela, com ilustrações SVG).
-- **Questões** originais dos PDFs (Unidades 1–4) + atividades práticas (Unidades 5–6).
-- **PDFs gerados** com as questões (só perguntas / com gabarito).
+### Desenvolvimento de Sistemas para Web (Programação Web Avançada)
+6 unidades — Python, HTTP, REST, Flask, ORM.
 
-## Estrutura
+### Estrutura de Dados II
+6 unidades — Arquivos, Análise de Algoritmos, Recursividade, Ordenação em memória externa,
+Árvores (ABB → AVL → árvore B), Indexação de string. Inclui simulado de prova.
+
+## Como o site funciona
+
+- **Home** — escolhe a matéria.
+- **Home da matéria** — lista de aulas + botão pras questões.
+- **Aula** — slides tela cheia. Setas do teclado, espaço ou clique. Tecla **T** abre o índice de tópicos.
+- **Questões** — abas por unidade, MCQ com feedback imediato ou questões abertas com "ver solução".
+
+## Estrutura de pastas
 
 ```
 UVV/
-├── site/                      # site de estudos (deployado no Pages)
+├── site/                              # site (deployado)
 │   ├── index.html
 │   ├── css/style.css
-│   └── js/{data.js, app.js}
-├── gerar_pdfs.py              # script que gera os PDFs de questões
-├── questions.json             # banco de questões exportado
-├── Questoes.pdf               # caderno em branco
-└── Questoes_Respondidas.pdf   # com gabarito comentado
+│   └── js/{data.js, data-ed2.js, app.js}
+├── Desenvolvimento de Sistemas para Web/
+│   └── (PDFs originais, script gerar_pdfs.py, PDFs de questões)
+└── Estrutura de Dados II/
+    ├── PlanoDisciplina_*.pdf          # ementa
+    ├── Prova/                         # fotos da prova
+    └── Caderno/                       # anotações
 ```
 
 ## Rodar localmente
@@ -30,6 +42,5 @@ Basta abrir `site/index.html` no navegador. Não precisa de servidor.
 
 ## Deploy
 
-O deploy no GitHub Pages é automático via GitHub Actions
-(veja `.github/workflows/pages.yml`) — a cada push em `main`
-o site em `site/` é publicado.
+O deploy acontece automaticamente a cada push em `main` via GitHub Actions
+(veja `.github/workflows/pages.yml`).

@@ -18,5 +18,14 @@ Thumbs.db
 *.log
 site.rar
 
-# PDFs originais (materiais didáticos com possível copyright — remova esta linha se quiser incluí-los)
+# PDFs e materiais originais (podem conter conteúdo protegido — não versionar)
 Unidade_*.pdf
+Desenvolvimento de Sistemas para Web/Unidade_*.pdf
+Desenvolvimento de Sistemas para Web/Questoes*.pdf
+Desenvolvimento de Sistemas para Web/questions.json
+
+# Materiais pessoais de ED2 (fotos do caderno, prova, plano — não versionar)
+Estrutura de Dados II/Prova/
+Estrutura de Dados II/Caderno/
+Estrutura de Dados II/PlanoDisciplina*.pdf
+Estrutura de Dados II/*.txt

@@ -3354,3 +3354,41 @@ class ProjectMember(db.Model):
       <p><strong>Motivo prático:</strong> <code>create_all()</code> não sabe <em>alterar</em> tabelas. Se você adicionar uma coluna nova, ele não cria a coluna em produção — só cria a tabela se ainda não existir. Alembic gera o <code>ALTER TABLE</code> específico.</p>` }
   ]
 };
+
+
+/* =========================================================
+   REGISTRO DE MATÉRIAS
+   Cada matéria expõe: name, slug, description, lessons, questions.
+   ========================================================= */
+
+const SUBJECTS = {
+  web: {
+    slug: 'web',
+    name: 'Desenvolvimento de Sistemas para Web',
+    short: 'Web Avançada',
+    description: 'Python, HTTP, REST, Flask, ORM. 6 unidades — do zero até uma API estruturada.',
+    color: '#7c9cff',
+    lessons: LESSONS,
+    questions: QUESTOES,
+    // ordem das páginas na aba de questões
+    questionTabs: [
+      { key: 'u1', label: 'Unidade 1 — Python' },
+      { key: 'u2', label: 'Unidade 2 — HTTP/REST' },
+      { key: 'u3', label: 'Unidade 3 — Flask' },
+      { key: 'u4', label: 'Unidade 4 — Factory/Contexto' },
+      { key: 'u5', label: 'Unidade 5 — Empacotamento' },
+      { key: 'u6', label: 'Unidade 6 — Modelos/ORM' }
+    ],
+    // ordem das aulas na home
+    lessonList: [
+      { key: 'u1', num: '1', title: 'Python básico', desc: 'Variáveis, funções, listas, classes, decorators.' },
+      { key: 'u2', num: '2', title: 'HTTP, APIs e REST', desc: 'Cliente-servidor, métodos, status codes, REST.' },
+      { key: 'u3', num: '3', title: 'Flask — primeira aplicação', desc: 'venv, rotas, blueprints, application factory.' },
+      { key: 'u4', num: '4', title: 'Application Factory e Contexto', desc: 'Import circular, DI, 3 contextos, 4 proxies.' },
+      { key: 'u5', num: '5', title: 'Empacotamento, deps e testes', desc: 'pyproject.toml, invoke, PyTest, cobertura.' },
+      { key: 'u6', num: '6', title: 'Modelos, ORM e persistência', desc: 'Flask-SQLAlchemy, entidades, relacionamentos.' }
+    ]
+  }
+  // 'ed2' é registrada em data-ed2.js
+};
+
