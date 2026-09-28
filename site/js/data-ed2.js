@@ -463,6 +463,312 @@ const SVG_ED2 = {
 
 };
 
+/* --------- SVGs de apoio para os slides expandidos --------- */
+
+SVG_ED2.arvoreB_ordem = `<svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+  <text x="250" y="30" text-anchor="middle" fill="#f0f0f5" font-size="15" font-weight="700">as duas contas da árvore B — ordem m</text>
+
+  <g>
+    <rect x="60" y="60" width="180" height="130" rx="10" fill="#1c1c25" stroke="#7c9cff" stroke-width="2"/>
+    <text x="150" y="90" text-anchor="middle" fill="#7c9cff" font-size="14" font-weight="700">CHAVES por nó</text>
+    <text x="150" y="130" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="22">máx = m − 1</text>
+    <text x="150" y="165" text-anchor="middle" fill="#a0a0aa" font-size="12">ex: ordem 5 → até 4 chaves</text>
+  </g>
+  <g>
+    <rect x="260" y="60" width="180" height="130" rx="10" fill="#1c1c25" stroke="#4ade80" stroke-width="2"/>
+    <text x="350" y="90" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="700">FILHOS por nó</text>
+    <text x="350" y="130" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="22">máx = m</text>
+    <text x="350" y="165" text-anchor="middle" fill="#a0a0aa" font-size="12">ex: ordem 5 → até 5 filhos</text>
+  </g>
+</svg>`;
+
+SVG_ED2.arvoreB_no = `<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="250" y="25" text-anchor="middle" fill="#f0f0f5" font-family="Inter" font-size="14" font-weight="600">anatomia de um nó — ordem 4</text>
+
+  <!-- caixa do nó -->
+  <rect x="80" y="60" width="340" height="50" rx="6" fill="#1c1c25" stroke="#7c9cff" stroke-width="2"/>
+
+  <!-- ponteiros filho + chave alternados -->
+  <circle cx="105" cy="85" r="8" fill="#4ade80"/>
+  <text x="105" y="89" text-anchor="middle" fill="#0c0c11" font-size="10" font-weight="700">p₀</text>
+
+  <text x="150" y="90" text-anchor="middle" fill="#f0f0f5" font-size="16">10</text>
+
+  <circle cx="190" cy="85" r="8" fill="#4ade80"/>
+  <text x="190" y="89" text-anchor="middle" fill="#0c0c11" font-size="10" font-weight="700">p₁</text>
+
+  <text x="240" y="90" text-anchor="middle" fill="#f0f0f5" font-size="16">25</text>
+
+  <circle cx="280" cy="85" r="8" fill="#4ade80"/>
+  <text x="280" y="89" text-anchor="middle" fill="#0c0c11" font-size="10" font-weight="700">p₂</text>
+
+  <text x="330" y="90" text-anchor="middle" fill="#f0f0f5" font-size="16">40</text>
+
+  <circle cx="395" cy="85" r="8" fill="#4ade80"/>
+  <text x="395" y="89" text-anchor="middle" fill="#0c0c11" font-size="10" font-weight="700">p₃</text>
+
+  <!-- setas explicativas -->
+  <text x="150" y="140" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="10">3 chaves</text>
+  <text x="150" y="155" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="10">(máx = m−1 = 3)</text>
+
+  <text x="330" y="140" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="10">4 filhos</text>
+  <text x="330" y="155" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="10">(máx = m = 4)</text>
+
+  <text x="250" y="185" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="11">chaves ordenadas: p_i aponta pra subárvore com valores entre chave[i-1] e chave[i]</text>
+</svg>`;
+
+SVG_ED2.busca_arvB = `<svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="250" y="25" text-anchor="middle" fill="#f0f0f5" font-family="Inter" font-size="14" font-weight="600">buscando 45 numa árvore B ordem 5</text>
+
+  <!-- raiz -->
+  <rect x="180" y="50" width="140" height="34" rx="4" fill="#1c1c25" stroke="#fbbf24" stroke-width="3"/>
+  <text x="200" y="72" fill="#f0f0f5" font-size="13">20</text>
+  <text x="235" y="72" fill="#f0f0f5" font-size="13">50</text>
+  <text x="275" y="72" fill="#f0f0f5" font-size="13">70</text>
+  <text x="340" y="72" fill="#fbbf24" font-family="Inter" font-size="11">← 45 &lt; 50 ✓</text>
+
+  <line x1="215" y1="84" x2="120" y2="130" stroke="#a0a0aa"/>
+
+  <!-- nó filho -->
+  <rect x="60" y="130" width="120" height="34" rx="4" fill="#1c1c25" stroke="#fbbf24" stroke-width="3"/>
+  <text x="80" y="152" fill="#f0f0f5" font-size="13">30</text>
+  <text x="115" y="152" fill="#f0f0f5" font-size="13">45</text>
+  <text x="150" y="152" fill="#f0f0f5" font-size="13">·</text>
+  <text x="200" y="152" fill="#4ade80" font-family="Inter" font-size="11">← 45 == 45 ✓</text>
+
+  <text x="250" y="215" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="12">1) na raiz: 20 &lt; 45 &lt; 50 → desce pelo filho da posição 1</text>
+  <text x="250" y="235" text-anchor="middle" fill="#4ade80" font-family="Inter" font-size="12">2) no filho: acha 45 → encerra a busca</text>
+</svg>`;
+
+SVG_ED2.insercao_facil = `<svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="130" y="25" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="12" font-weight="700">antes</text>
+  <text x="370" y="25" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="12" font-weight="700">depois de inserir 25</text>
+
+  <!-- antes -->
+  <rect x="50" y="60" width="160" height="34" rx="4" fill="#1c1c25" stroke="#4ade80" stroke-width="2"/>
+  <text x="75" y="82" fill="#f0f0f5" font-size="14">10</text>
+  <text x="115" y="82" fill="#f0f0f5" font-size="14">40</text>
+  <text x="160" y="82" fill="#a0a0aa" font-size="14">·</text>
+  <text x="130" y="120" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="10">2 chaves de 3 (tem espaço)</text>
+
+  <path d="M 220 82 L 285 82" stroke="#4ade80" stroke-width="2" marker-end="url(#ai)"/>
+
+  <!-- depois -->
+  <rect x="290" y="60" width="160" height="34" rx="4" fill="#1c1c25" stroke="#4ade80" stroke-width="2"/>
+  <text x="315" y="82" fill="#f0f0f5" font-size="14">10</text>
+  <text x="355" y="82" fill="#fbbf24" font-size="14">25</text>
+  <text x="400" y="82" fill="#f0f0f5" font-size="14">40</text>
+  <text x="370" y="120" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="10">encaixa em ordem, sem split</text>
+
+  <text x="250" y="175" text-anchor="middle" fill="#4ade80" font-family="Inter" font-size="13" font-weight="600">Caso simples: cabe na folha → só inserir em ordem</text>
+  <text x="250" y="195" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="11">nenhum split, nenhuma promoção — só empurra as chaves</text>
+
+  <defs><marker id="ai" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/></marker></defs>
+</svg>`;
+
+SVG_ED2.split_cascata = `<svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="250" y="25" text-anchor="middle" fill="#f0f0f5" font-family="Inter" font-size="14" font-weight="600">split cascata → altura cresce</text>
+
+  <text x="130" y="60" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="11">antes</text>
+  <text x="370" y="60" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="11">depois</text>
+
+  <!-- antes: raiz cheia -->
+  <rect x="60" y="80" width="140" height="30" rx="4" fill="#1c1c25" stroke="#fbbf24" stroke-width="2"/>
+  <text x="90" y="100" fill="#f0f0f5" font-size="13">20</text>
+  <text x="125" y="100" fill="#f0f0f5" font-size="13">40</text>
+  <text x="165" y="100" fill="#f0f0f5" font-size="13">60</text>
+
+  <line x1="80" y1="110" x2="55" y2="135" stroke="#a0a0aa"/>
+  <line x1="105" y1="110" x2="105" y2="135" stroke="#a0a0aa"/>
+  <line x1="150" y1="110" x2="155" y2="135" stroke="#a0a0aa"/>
+  <line x1="180" y1="110" x2="210" y2="135" stroke="#a0a0aa"/>
+
+  <rect x="20" y="135" width="70" height="26" rx="3" fill="#1c1c25" stroke="#4ade80"/>
+  <text x="55" y="153" text-anchor="middle" fill="#f0f0f5" font-size="12">10</text>
+
+  <rect x="95" y="135" width="70" height="26" rx="3" fill="#1c1c25" stroke="#4ade80"/>
+  <text x="130" y="153" text-anchor="middle" fill="#f0f0f5" font-size="12">30</text>
+
+  <rect x="170" y="135" width="70" height="26" rx="3" fill="#1c1c25" stroke="#ef4444" stroke-width="2"/>
+  <text x="195" y="153" fill="#f0f0f5" font-size="12">50</text>
+  <text x="220" y="153" fill="#f0f0f5" font-size="12">55</text>
+
+  <text x="130" y="200" text-anchor="middle" fill="#ef4444" font-family="Inter" font-size="11">inserir 58 → folha cheia,</text>
+  <text x="130" y="215" text-anchor="middle" fill="#ef4444" font-family="Inter" font-size="11">split, promove 55 → raiz também cheia,</text>
+  <text x="130" y="230" text-anchor="middle" fill="#ef4444" font-family="Inter" font-size="11">split raiz, promove 40 → nasce nova raiz</text>
+
+  <!-- depois -->
+  <rect x="360" y="80" width="40" height="30" rx="4" fill="#1c1c25" stroke="#7c9cff" stroke-width="2"/>
+  <text x="380" y="100" text-anchor="middle" fill="#f0f0f5" font-size="13">40</text>
+
+  <line x1="370" y1="110" x2="335" y2="135" stroke="#a0a0aa"/>
+  <line x1="390" y1="110" x2="420" y2="135" stroke="#a0a0aa"/>
+
+  <rect x="300" y="135" width="70" height="26" rx="3" fill="#1c1c25" stroke="#7c9cff"/>
+  <text x="335" y="153" text-anchor="middle" fill="#f0f0f5" font-size="12">20</text>
+
+  <rect x="390" y="135" width="70" height="26" rx="3" fill="#1c1c25" stroke="#7c9cff"/>
+  <text x="425" y="153" text-anchor="middle" fill="#f0f0f5" font-size="12">55</text>
+
+  <line x1="315" y1="161" x2="300" y2="180" stroke="#a0a0aa"/>
+  <line x1="345" y1="161" x2="360" y2="180" stroke="#a0a0aa"/>
+  <line x1="405" y1="161" x2="395" y2="180" stroke="#a0a0aa"/>
+  <line x1="440" y1="161" x2="450" y2="180" stroke="#a0a0aa"/>
+
+  <rect x="280" y="180" width="40" height="26" rx="3" fill="#1c1c25" stroke="#4ade80"/>
+  <text x="300" y="198" text-anchor="middle" fill="#f0f0f5" font-size="12">10</text>
+
+  <rect x="340" y="180" width="40" height="26" rx="3" fill="#1c1c25" stroke="#4ade80"/>
+  <text x="360" y="198" text-anchor="middle" fill="#f0f0f5" font-size="12">30</text>
+
+  <rect x="380" y="180" width="40" height="26" rx="3" fill="#1c1c25" stroke="#4ade80"/>
+  <text x="400" y="198" text-anchor="middle" fill="#f0f0f5" font-size="12">50</text>
+
+  <rect x="435" y="180" width="45" height="26" rx="3" fill="#1c1c25" stroke="#4ade80"/>
+  <text x="457" y="198" text-anchor="middle" fill="#f0f0f5" font-size="12">58</text>
+
+  <text x="370" y="235" text-anchor="middle" fill="#7c9cff" font-family="Inter" font-size="11">altura aumentou de 2 para 3</text>
+  <text x="370" y="253" text-anchor="middle" fill="#7c9cff" font-family="Inter" font-size="11">— é assim que a árvore B cresce</text>
+</svg>`;
+
+SVG_ED2.recursao_frame = `<svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+  <text x="130" y="25" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="700">recursão comum</text>
+  <text x="370" y="25" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="700">recursão de cauda + TCO</text>
+
+  <text x="130" y="50" text-anchor="middle" fill="#a0a0aa" font-size="11">pilha crescendo:</text>
+  <g>
+    <rect x="60" y="60" width="140" height="24" rx="3" fill="#ef4444" opacity="0.15" stroke="#ef4444"/>
+    <text x="130" y="76" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="11">fat(1)</text>
+    <rect x="60" y="90" width="140" height="24" rx="3" fill="#ef4444" opacity="0.25" stroke="#ef4444"/>
+    <text x="130" y="106" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="11">fat(2)</text>
+    <rect x="60" y="120" width="140" height="24" rx="3" fill="#ef4444" opacity="0.35" stroke="#ef4444"/>
+    <text x="130" y="136" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="11">fat(3)</text>
+    <rect x="60" y="150" width="140" height="24" rx="3" fill="#ef4444" opacity="0.45" stroke="#ef4444"/>
+    <text x="130" y="166" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="11">fat(4)</text>
+    <rect x="60" y="180" width="140" height="24" rx="3" fill="#ef4444" opacity="0.55" stroke="#ef4444"/>
+    <text x="130" y="196" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="11">fat(5)</text>
+  </g>
+  <text x="130" y="230" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="600">O(n) memória</text>
+  <text x="130" y="248" text-anchor="middle" fill="#a0a0aa" font-size="10">risco de stack overflow</text>
+
+  <line x1="250" y1="30" x2="250" y2="255" stroke="#262631"/>
+
+  <text x="370" y="50" text-anchor="middle" fill="#a0a0aa" font-size="11">o MESMO frame reusado:</text>
+  <g>
+    <rect x="300" y="90" width="140" height="60" rx="4" fill="#4ade80" opacity="0.25" stroke="#4ade80" stroke-width="2"/>
+    <text x="370" y="115" text-anchor="middle" fill="#f0f0f5" font-family="JetBrains Mono, monospace" font-size="11">fat_aux(n, acc)</text>
+    <text x="370" y="135" text-anchor="middle" fill="#a0a0aa" font-size="10">n e acc atualizados</text>
+  </g>
+  <text x="370" y="230" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">O(1) memória</text>
+  <text x="370" y="248" text-anchor="middle" fill="#a0a0aa" font-size="10">vira essencialmente um loop</text>
+</svg>`;
+
+SVG_ED2.merge_passo = `<svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="250" y="25" text-anchor="middle" fill="#f0f0f5" font-family="Inter" font-size="14" font-weight="600">merge de 3 fitas — passo 1</text>
+
+  <g>
+    <text x="30" y="60" fill="#a0a0aa" font-family="Inter" font-size="11">fita 1</text>
+    <rect x="30" y="70" width="180" height="30" rx="4" fill="#1c1c25" stroke="#7c9cff"/>
+    <text x="45" y="90" fill="#fbbf24" font-size="13" font-weight="700">3</text>
+    <text x="80" y="90" fill="#a0a0aa" font-size="13">7  15  22</text>
+  </g>
+  <g>
+    <text x="30" y="120" fill="#a0a0aa" font-family="Inter" font-size="11">fita 2</text>
+    <rect x="30" y="130" width="180" height="30" rx="4" fill="#1c1c25" stroke="#7c9cff"/>
+    <text x="45" y="150" fill="#fbbf24" font-size="13" font-weight="700">1</text>
+    <text x="80" y="150" fill="#a0a0aa" font-size="13">9  12  18</text>
+  </g>
+  <g>
+    <text x="30" y="180" fill="#a0a0aa" font-family="Inter" font-size="11">fita 3</text>
+    <rect x="30" y="190" width="180" height="30" rx="4" fill="#1c1c25" stroke="#7c9cff"/>
+    <text x="45" y="210" fill="#fbbf24" font-size="13" font-weight="700">5</text>
+    <text x="80" y="210" fill="#a0a0aa" font-size="13">10 14 20</text>
+  </g>
+
+  <text x="250" y="145" text-anchor="middle" fill="#fbbf24" font-family="Inter" font-size="11">menor topo</text>
+  <text x="250" y="160" text-anchor="middle" fill="#fbbf24" font-family="Inter" font-size="12" font-weight="700">= 1</text>
+
+  <path d="M 220 145 L 275 130" stroke="#4ade80" stroke-width="2" marker-end="url(#am2)"/>
+
+  <g>
+    <text x="290" y="60" fill="#a0a0aa" font-family="Inter" font-size="11">saída</text>
+    <rect x="290" y="70" width="180" height="30" rx="4" fill="#1c1c25" stroke="#4ade80" stroke-width="2"/>
+    <text x="305" y="90" fill="#4ade80" font-size="13" font-weight="700">1</text>
+    <text x="330" y="90" fill="#a0a0aa" font-size="13">...</text>
+  </g>
+
+  <text x="250" y="245" text-anchor="middle" fill="#a0a0aa" font-family="Inter" font-size="11">1 é o menor entre {3, 1, 5} → escreve 1, avança fita 2</text>
+
+  <defs><marker id="am2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/></marker></defs>
+</svg>`;
+
+SVG_ED2.selecao_sub = `<svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="250" y="25" text-anchor="middle" fill="#f0f0f5" font-family="Inter" font-size="14" font-weight="600">seleção por substituição — RAM = 3</text>
+
+  <!-- entrada -->
+  <text x="30" y="55" fill="#a0a0aa" font-family="Inter" font-size="11">entrada:</text>
+  <text x="80" y="55" fill="#f0f0f5" font-size="12">50 · 30 · 20 · 40 · 10 · 60 · ...</text>
+
+  <!-- heap ativo -->
+  <rect x="60" y="80" width="180" height="80" rx="10" fill="#1c1c25" stroke="#7c9cff" stroke-width="2"/>
+  <text x="150" y="105" text-anchor="middle" fill="#7c9cff" font-family="Inter" font-size="12" font-weight="700">heap ativo (RAM)</text>
+  <text x="80" y="135" fill="#f0f0f5" font-size="13">20 → sai (menor)</text>
+  <text x="90" y="153" fill="#a0a0aa" font-size="11">30, 50 ficam</text>
+
+  <path d="M 250 120 L 310 120" stroke="#4ade80" stroke-width="2" marker-end="url(#ass)"/>
+  <text x="280" y="112" text-anchor="middle" fill="#4ade80" font-family="Inter" font-size="10">grava</text>
+
+  <!-- run atual -->
+  <rect x="320" y="80" width="150" height="80" rx="10" fill="#1c1c25" stroke="#4ade80" stroke-width="2"/>
+  <text x="395" y="105" text-anchor="middle" fill="#4ade80" font-family="Inter" font-size="12" font-weight="700">run 1 (saída)</text>
+  <text x="395" y="133" text-anchor="middle" fill="#f0f0f5" font-size="14">20</text>
+  <text x="395" y="152" text-anchor="middle" fill="#a0a0aa" font-size="10">último_gravado = 20</text>
+
+  <!-- decisão -->
+  <text x="30" y="200" fill="#a0a0aa" font-family="Inter" font-size="11">lê 40 do arquivo:</text>
+  <text x="60" y="220" fill="#f0f0f5" font-size="12">40 ≥ 20 → entra no heap ativo ✓</text>
+
+  <text x="30" y="245" fill="#a0a0aa" font-family="Inter" font-size="11">lê 10 do arquivo (mais tarde):</text>
+  <text x="60" y="265" fill="#f0f0f5" font-size="12">10 &lt; 20 → CONGELA (vai para run 2)</text>
+
+  <defs><marker id="ass" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4ade80"/></marker></defs>
+</svg>`;
+
+SVG_ED2.identifica_cauda = `<svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+  <text x="250" y="25" text-anchor="middle" fill="#f0f0f5" font-family="Inter" font-size="14" font-weight="600">é cauda? pergunta: "o que vem DEPOIS do return da chamada?"</text>
+
+  <g>
+    <rect x="30" y="55" width="200" height="90" rx="8" fill="#1c1c25" stroke="#ef4444"/>
+    <text x="45" y="80" fill="#f0f0f5" font-size="12">return n * fat(n-1);</text>
+    <text x="45" y="105" fill="#ef4444" font-size="11">↑ depois de fat volta,</text>
+    <text x="45" y="122" fill="#ef4444" font-size="11">   ainda MULTIPLICA por n</text>
+    <text x="130" y="138" text-anchor="middle" fill="#ef4444" font-family="Inter" font-size="12" font-weight="700">NÃO é cauda</text>
+  </g>
+
+  <g>
+    <rect x="270" y="55" width="200" height="90" rx="8" fill="#1c1c25" stroke="#4ade80"/>
+    <text x="285" y="80" fill="#f0f0f5" font-size="12">return fat(n-1, acc*n);</text>
+    <text x="285" y="105" fill="#4ade80" font-size="11">↑ depois de fat volta,</text>
+    <text x="285" y="122" fill="#4ade80" font-size="11">   retorna DIRETO — nada</text>
+    <text x="370" y="138" text-anchor="middle" fill="#4ade80" font-family="Inter" font-size="12" font-weight="700">É cauda</text>
+  </g>
+
+  <g>
+    <rect x="30" y="165" width="200" height="80" rx="8" fill="#1c1c25" stroke="#ef4444"/>
+    <text x="45" y="188" fill="#f0f0f5" font-size="12">int x = rec(n-1);</text>
+    <text x="45" y="205" fill="#f0f0f5" font-size="12">return x + 1;</text>
+    <text x="130" y="230" text-anchor="middle" fill="#ef4444" font-family="Inter" font-size="12" font-weight="700">NÃO é cauda (soma depois)</text>
+  </g>
+
+  <g>
+    <rect x="270" y="165" width="200" height="80" rx="8" fill="#1c1c25" stroke="#4ade80"/>
+    <text x="285" y="188" fill="#f0f0f5" font-size="12">if (n==0) return acc;</text>
+    <text x="285" y="205" fill="#f0f0f5" font-size="12">return rec(n-1, acc);</text>
+    <text x="370" y="230" text-anchor="middle" fill="#4ade80" font-family="Inter" font-size="12" font-weight="700">É cauda</text>
+  </g>
+</svg>`;
+
+
 /* combinar SVGs originais com os de ED2 */
 Object.assign(SVG, SVG_ED2);
 
@@ -659,9 +965,94 @@ int soma(int v[], int n) {
         </ul>`,
         note:'Cuidado com problemas onde <em>subchamadas se repetem</em> — fibonacci recursivo é exponencial. Nesses casos, use memoização ou versão iterativa.' },
 
+      /* --------- Bateria de exemplos de identificação --------- */
+      { title:'Bateria: é cauda ou não é?', illustration: SVG.identifica_cauda,
+        body:'A pergunta mental é sempre a mesma: <strong>depois que a chamada recursiva retorna, sobra algum trabalho pra fazer antes do return?</strong>',
+        note:'Se sobra trabalho (soma, multiplicação, atribuição, if...) → NÃO é cauda. Se o valor retornado é <em>direto</em> o resultado da chamada recursiva → é cauda.' },
+
+      { title:'Bateria 1 — clássico do fatorial',
+        body:'',
+        code:`// fatorial recursivo comum
+int fat(int n) {
+    if (n == 0) return 1;
+    return n * fat(n - 1);        // depois de fat retornar, MULTIPLICA por n
+}                                  // → NÃO é cauda
+
+// fatorial de cauda com acumulador
+int fat_aux(int n, int acc) {
+    if (n == 0) return acc;
+    return fat_aux(n - 1, acc * n);   // chamada é a ÚLTIMA operação
+}                                      // → É cauda
+
+int fat(int n) { return fat_aux(n, 1); }   // acc começa em 1 (elemento neutro do *)`,
+        note:'Sempre que a operação for multiplicação, o acumulador começa em <strong>1</strong> (neutro do *). Se fosse soma, começaria em <strong>0</strong>.' },
+
+      { title:'Bateria 2 — contar elementos que satisfazem condição',
+        body:'',
+        code:`// versão comum
+int conta_pares(int v[], int n) {
+    if (n == 0) return 0;
+    int resto = conta_pares(v, n-1);
+    if (v[n-1] % 2 == 0) return 1 + resto;    // ainda soma depois
+    else return resto;
+}
+
+// versão de cauda
+int conta_aux(int v[], int n, int acc) {
+    if (n == 0) return acc;
+    int novo_acc = (v[n-1] % 2 == 0) ? acc + 1 : acc;
+    return conta_aux(v, n-1, novo_acc);
+}
+
+int conta_pares(int v[], int n) { return conta_aux(v, n, 0); }`,
+        note:'A lógica que <em>estava depois</em> da recursão (o "if soma 1 ou não") foi movida <em>pra dentro</em> do acumulador. Padrão universal.' },
+
+      { title:'Bateria 3 — potenciação',
+        body:'',
+        code:`// pow(base, exp) recursivo comum
+int pow_r(int base, int exp) {
+    if (exp == 0) return 1;
+    return base * pow_r(base, exp - 1);   // NÃO é cauda
+}
+
+// versão de cauda
+int pow_aux(int base, int exp, int acc) {
+    if (exp == 0) return acc;
+    return pow_aux(base, exp - 1, acc * base);   // É cauda
+}
+
+int pow_r(int base, int exp) { return pow_aux(base, exp, 1); }`,
+        note:'Note o padrão comum: adiciona um parâmetro <code>acc</code>, muda o caso base pra <code>return acc</code>, e move a operação pra dentro do argumento da chamada.' },
+
+      { title:'Template mental para converter em cauda',
+        body:'Para praticamente qualquer função recursiva, essa receita funciona:',
+        html:`<ol class="slide-list numbered">
+          <li>Identifique o <strong>caso base</strong> e o <strong>valor inicial</strong> (0 pra soma, 1 pra produto, "" pra string vazia, [] pra lista).</li>
+          <li>Adicione um parâmetro extra <code>acc</code> (acumulador).</li>
+          <li>Mude o caso base pra retornar o acumulador: <code>if (base) return acc;</code></li>
+          <li>Mude o passo recursivo: em vez de <code>return op(v[n-1], rec(n-1))</code>, faça <code>return rec(n-1, op(acc, v[n-1]))</code>.</li>
+          <li>Crie uma função pública que chama a auxiliar com o valor inicial.</li>
+        </ol>`,
+        note:'Se você memorizar esse template, converte qualquer função em 30 segundos na prova.' },
+
+      { title:'Por que a otimização de cauda funciona', illustration: SVG.recursao_frame,
+        body:'Sem cauda, cada chamada empilha um frame novo — cada um esperando o retorno do próximo pra completar sua conta.',
+        note:'Com cauda, não há trabalho pendente. O compilador percebe isso e <strong>reaproveita o mesmo frame</strong> — só atualiza os parâmetros (n, acc) e "salta" pro início da função. Vira essencialmente um loop.' },
+
+      { title:'Cuidado: nem toda linguagem otimiza cauda',
+        body:'A otimização (Tail Call Optimization, TCO) é feita pelo <strong>compilador</strong>. Ela funciona em:',
+        html:`<ul class="slide-list">
+          <li><strong>C, C++</strong> — GCC, Clang normalmente otimizam com <code>-O2</code></li>
+          <li><strong>Scheme, Racket, Scala, Haskell, OCaml</strong> — obrigatório pelo padrão</li>
+          <li><strong>JavaScript</strong> — spec ES6 pediu, mas quase nenhum motor implementa</li>
+          <li><strong>Python</strong> — <strong>NÃO faz TCO</strong> (decisão explícita do Guido)</li>
+          <li><strong>Java</strong> — <strong>NÃO faz</strong> (limitação da JVM)</li>
+        </ul>`,
+        note:'Em Python e Java, mesmo escrevendo recursão de cauda, você ainda vai estourar a pilha para n grande. Nessas linguagens, a solução é iterativa mesmo.' },
+
       { title:'Fim da Unidade III',
         body:'Recursão = base + passo. Pilha empilha frames a cada chamada. Cauda permite otimização pra loop.',
-        note:'Recursão de cauda cai muito em prova. Saiba identificar e converter.' }
+        note:'Recursão de cauda cai muito em prova — vale até 2 pontos. Grave o template de conversão com acumulador. Ele resolve praticamente todas as questões.' }
     ]
   },
 
@@ -718,113 +1109,414 @@ onde:
         </ul>`,
         note:'Em média gera runs de tamanho <strong>2m</strong> — metade das passadas de intercalação.' },
 
+      /* --------- Exemplos numéricos --------- */
+      { title:'Praticando a fórmula — exemplo 1',
+        body:'Arquivo com 900 registros. RAM cabe 100. Intercalação de 3 caminhos (f=3).',
+        code:`P = ⌈log_f (N/m)⌉ + 1
+P = ⌈log_3 (900/100)⌉ + 1
+P = ⌈log_3 (9)⌉ + 1
+P = ⌈2⌉ + 1
+P = 3 passadas
+
+Interpretação:
+  Passada 1: geração — divide o arquivo em 9 runs de 100
+  Passada 2: intercala 3 grupos de 3 runs → 3 runs de 300
+  Passada 3: intercala as 3 runs restantes → 1 run de 900`,
+        note:'log₃(9) = 2 porque 3² = 9. Sempre pense em "quantas vezes preciso multiplicar f por ele mesmo pra chegar em N/m".' },
+
+      { title:'Praticando — exemplo 2',
+        body:'Arquivo com 10.000 registros. RAM cabe 250. Intercalação de 5 caminhos.',
+        code:`P = ⌈log_5 (10000/250)⌉ + 1
+P = ⌈log_5 (40)⌉ + 1
+P = ⌈2.29⌉ + 1
+P = 3 + 1 = 4 passadas
+
+Como log_5 não deu exato, temos que arredondar pra CIMA:
+  5² = 25   (não cobre 40)
+  5³ = 125  (cobre 40)
+  → precisamos de log_5(40) = 3 passadas de merge + 1 de geração = 4 total`,
+        note:'Sempre ⌈⌉ (teto). Se der 2.29, arredonda pra 3. Se der 1.001, arredonda pra 2. Essa parte é onde muita gente erra.' },
+
+      { title:'Praticando — exemplo 3 (com cálculo passo-a-passo)',
+        body:'Arquivo com 2000 registros. m = 50. f = 4.',
+        code:`Passo 1: N/m = 2000/50 = 40   ← quantas runs iniciais
+Passo 2: log_4(40) = ?
+         4¹ = 4    (não cobre)
+         4² = 16   (não cobre)
+         4³ = 64   (cobre!)
+         → log_4(40) está entre 2 e 3, mas arredondando pra cima = 3
+Passo 3: P = 3 + 1 = 4 passadas total
+
+Alternativa numérica:
+  log_4(40) = ln(40)/ln(4) = 3.689/1.386 ≈ 2.66
+  ⌈2.66⌉ = 3
+  P = 3 + 1 = 4 ✓`,
+        note:'Duas formas de pensar: elevar f progressivamente até ultrapassar N/m, ou usar a fórmula de mudança de base logarítmica. Use a que preferir.' },
+
+      /* --------- Simulação passo-a-passo de merge --------- */
+      { title:'Merge passo-a-passo — visual', illustration: SVG.merge_passo,
+        body:'A intercalação em si é bem simples: olha os topos das f fitas de entrada, escreve o menor na saída, avança essa fita. Repete até todas terminarem.',
+        note:'Cada fita já vem <strong>ordenada</strong> (produto da passada anterior). Isso garante que o menor global sempre está entre os topos das fitas.' },
+
+      { title:'Merge completo — 3 fitas em 1',
+        body:'Vamos juntar fita1=[3,7,15,22], fita2=[1,9,12,18], fita3=[5,10,14,20]:',
+        code:`saída: []
+topos: {3, 1, 5}  → menor = 1 (da fita2)
+  saída: [1]
+  topos: {3, 9, 5}  → menor = 3 (da fita1)
+  saída: [1, 3]
+  topos: {7, 9, 5}  → menor = 5 (da fita3)
+  saída: [1, 3, 5]
+  topos: {7, 9, 10}  → menor = 7 (da fita1)
+  saída: [1, 3, 5, 7]
+  topos: {15, 9, 10}  → menor = 9 (da fita2)
+  saída: [1, 3, 5, 7, 9]
+  ... continua até:
+
+resultado: [1, 3, 5, 7, 9, 10, 12, 14, 15, 18, 20, 22]`,
+        note:'Comparar 3 topos e pegar o menor é O(f). Repetido pra cada elemento, o custo total de uma passada é O(N·log f) usando heap, ou O(N·f) usando comparação linear.' },
+
+      /* --------- Seleção por substituição em detalhes --------- */
+      { title:'Seleção por substituição — a mágica', illustration: SVG.selecao_sub,
+        body:'A ideia é continuar recebendo elementos <strong>enquanto ordena</strong>, aproveitando ordem parcial dos dados de entrada. Runs saem maiores que m.',
+        note:'Funciona porque, se o próximo elemento lido é maior que o último escrito, ele ainda pode participar da run atual (mantém a ordem). Só quando é menor precisamos abandonar essa run.' },
+
+      { title:'Simulação da seleção por substituição — RAM = 3',
+        body:'Entrada: 50, 30, 20, 40, 60, 10, 45, 80. RAM cabe 3.',
+        code:`Passo 1: enche RAM com {50, 30, 20}
+Passo 2: menor = 20 → escreve na run 1. RAM: {50, 30}
+Passo 3: lê 40. 40 ≥ 20 (último escrito) → entra. RAM: {50, 30, 40}
+Passo 4: menor = 30 → escreve. RAM: {50, 40}
+Passo 5: lê 60. 60 ≥ 30 → entra. RAM: {50, 40, 60}
+Passo 6: menor = 40 → escreve. RAM: {50, 60}
+Passo 7: lê 10. 10 < 40 (último escrito) → CONGELA em "próxima run". RAM ativa: {50, 60}
+Passo 8: menor ativo = 50 → escreve. RAM ativa: {60}, congelados: {10}
+Passo 9: lê 45. 45 < 50 → CONGELA. RAM ativa: {60}, congelados: {10, 45}
+Passo 10: menor ativo = 60 → escreve. RAM ativa: vazia
+   → run 1 encerrada!  run 1 = [20, 30, 40, 50, 60] (5 elementos)
+
+Passo 11: começa run 2 com congelados {10, 45}
+Passo 12: lê 80. 80 ≥ 10 → RAM ativa: {10, 45, 80}
+...`,
+        note:'Note que run 1 saiu com <strong>5 elementos</strong>, apesar de m = 3! Sem seleção por substituição, sairiam runs de 3 elementos. Isso é a economia.' },
+
+      { title:'Por que gera runs médias de 2m',
+        body:'Prova matemática (informal): a cada elemento lido, há aproximadamente 50% de chance dele ser maior que o último escrito (com dados aleatórios). Metade entra na run atual, metade vai pra próxima.',
+        code:`Total lido durante run atual ≈ 2m
+Runs médias ≈ 2m elementos
+
+Consequência: metade das runs iniciais, metade das passadas de merge:
+  P = ⌈log_f (N/(2m))⌉ + 1
+
+Isso pode economizar UMA passada inteira — que é
+uma economia enorme (ler+escrever o arquivo todo).`,
+        note:'Em dados já parcialmente ordenados (comum na vida real), o ganho é ainda maior. Runs podem sair muito maiores que 2m.' },
+
+      { title:'Comparação lado-a-lado',
+        body:'Para o mesmo problema (N=1000, m=100, f=4):',
+        code:`SEM seleção por substituição:
+  runs iniciais = 1000/100 = 10 runs de 100
+  P = ⌈log_4(10)⌉ + 1 = 2 + 1 = 3 passadas
+
+COM seleção por substituição:
+  runs iniciais ≈ 1000/200 = 5 runs de ~200
+  P = ⌈log_4(5)⌉ + 1 = 2 + 1 = 3 passadas  (mesmo neste caso)
+
+Outro exemplo (N=800, m=100, f=4):
+  SEM: runs = 800/100 = 8, log_4(8) = 1.5 → 2, P = 3
+  COM: runs = 800/200 = 4, log_4(4) = 1, P = 2  ← economia!`,
+        note:'A economia de uma passada só aparece em certas combinações de N, m, f — não é automática. Sempre calcule os dois casos separadamente na prova.' },
+
       { title:'Fim da Unidade IV',
-        body:'Ordenação externa = gerar runs + intercalar. Mais caminhos (f maior) = menos passadas. Seleção por substituição gera runs maiores.',
-        note:'O critério de avaliação principal é <strong>número de passadas</strong>, porque cada passada implica ler+escrever o arquivo inteiro.' }
+        body:'Ordenação externa = gerar runs + intercalar. Mais caminhos (f maior) = menos passadas. Seleção por substituição gera runs maiores → potencialmente menos passadas.',
+        note:'Vale 2 pontos na prova. Grave a fórmula <code>P = ⌈log_f(N/m)⌉ + 1</code>. E sempre compare o cenário com/sem seleção por substituição.' }
     ]
   },
 
-  /* ============ UNIDADE V — ESTRUTURAS NÃO LINEARES ============ */
+  /* ============ UNIDADE V — ÁRVORES (foco em Árvore B) ============ */
   u5: {
-    title: 'Árvores — de ABB a árvore B',
+    title: 'Árvores — de ABB até Árvore B',
     slides: [
-      { type:'title', kicker:'Unidade V', title:'Árvores',
-        body:'Da árvore binária de busca até a árvore B, projetada pra memória externa. Aqui está o coração da matéria e da prova.' },
+      { type:'title', kicker:'Unidade V — a mais importante da prova', title:'Árvores',
+        body:'Aqui está o coração da matéria e da prova. Vamos partir do zero (ABB), passar por AVL rapidinho, e mergulhar fundo na Árvore B — inclusive com exemplos passo-a-passo que aparecem quase idênticos em prova.' },
 
-      { title:'Árvore Binária de Busca (ABB)', illustration: SVG.abb,
-        body:'Cada nó tem no máximo 2 filhos. Regra: <strong>filho esquerdo &lt; pai &lt; filho direito</strong>. Busca segue a regra: menor esquerda, maior direita.',
-        note:'Se inserida em ordem crescente, degenera em lista — busca vira O(n).' },
+      /* --------- ABB e AVL como recap --------- */
+      { title:'Recap: Árvore Binária de Busca (ABB)', illustration: SVG.abb,
+        body:'Cada nó tem no máximo 2 filhos. Regra de ouro: <strong>tudo à esquerda é menor, tudo à direita é maior</strong>. Busca aproveita isso pra podar metade da árvore em cada passo.',
+        note:'Problema: se você inserir em ordem crescente (1, 2, 3, 4, 5), a ABB "degenera" numa lista — busca vira O(n) em vez de O(log n).' },
 
-      { title:'O problema do desbalanceamento',
-        body:'Inserir 1, 2, 3, 4, 5 numa ABB vazia:',
-        code:`     1
-      \\
-       2
-        \\
-         3
-          \\
-           4     ← altura = n, busca O(n)
-            \\
-             5`,
-        note:'Solução clássica: <strong>AVL</strong> — mantém balanceamento reorganizando em cada inserção. Custo: mais operações por inserção.' },
+      { title:'AVL — o remédio pro desbalanceamento',
+        body:'AVL é uma ABB com uma regra extra:',
+        code:`|altura(subárvore esquerda) − altura(subárvore direita)| ≤ 1
 
-      { title:'AVL — árvore auto-balanceada',
-        body:'Árvore ABB com uma regra extra: <strong>a diferença de altura entre subárvores esquerda e direita de qualquer nó é no máximo 1</strong>.',
-        code:`|altura(esq) - altura(dir)| ≤ 1  ← fator de balanceamento
+Se romper após uma inserção → aplica ROTAÇÕES:
+  - rotação simples à esquerda
+  - rotação simples à direita
+  - rotação dupla esquerda-direita
+  - rotação dupla direita-esquerda`,
+        note:'Garante busca em O(log n) mesmo no pior caso. Ótima pra RAM. Mas pra disco ainda não é o ideal — vamos ver por quê.' },
 
-Se romper, aplica rotações (simples ou duplas) para consertar.`,
-        note:'Garante busca em O(log n) sempre. Mas para memória externa, ainda não é ideal — cada nó = 2 acessos ao disco no pior caso.' },
+      { title:'Por que AVL não serve pra disco',
+        body:'Cada nó da AVL tem 1 chave e 2 filhos. Se uma árvore tem 1 milhão de chaves:',
+        code:`altura ≈ log₂(1.000.000) ≈ 20 níveis
 
-      { title:'O salto conceitual: árvore B',
-        body:'ABB e AVL são feitas pra <strong>RAM</strong>. Pra <strong>disco</strong> queremos árvores <em>largas e baixas</em>: cada nó com muitas chaves, altura pequena.',
-        note:'Ideia: cada nó da árvore B ocupa <em>um bloco do disco</em>. Uma leitura carrega dezenas de chaves de uma vez.' },
+busca no pior caso = 20 acessos ao disco
+                     = 20 seeks
+                     = ~200ms (num HD)`,
+        note:'Isso é caro demais. Precisamos de árvores com MUITAS chaves por nó — para que cada leitura do disco traga bastante informação de uma vez.' },
 
-      { title:'Árvore B — definição', illustration: SVG.arvoreB,
-        body:'Árvore B de <strong>ordem m</strong>: cada nó tem no máximo <strong>m-1 chaves</strong> e <strong>m filhos</strong>. Chaves ordenadas dentro do nó. Todas as folhas no mesmo nível.',
+      /* --------- Salto conceitual: nascimento da árvore B --------- */
+      { title:'O salto: "cada nó = um bloco de disco"',
+        body:'A árvore B foi projetada em 1972 (Bayer & McCreight) para memória externa. A ideia central é <strong>casar o tamanho do nó com o tamanho do bloco do disco</strong>.',
+        note:'Se um bloco de 4KB cabe ~100 chaves, então cada nó da árvore B tem ~100 chaves. A árvore fica larga e baixa. Uma árvore com 10 milhões de chaves cabe em ~3 níveis.' },
+
+      { title:'Árvore B — a definição que cai em prova',
+        body:'Uma árvore B tem uma <strong>ordem m</strong>, que define os limites de cada nó.',
+        html:`<div class="slide-body" style="font-size:20px; margin-top:10px;">
+          <strong>Regras fundamentais:</strong>
+        </div>
+        <ul class="slide-list">
+          <li>Cada nó tem <strong>no máximo m − 1 chaves</strong></li>
+          <li>Cada nó tem <strong>no máximo m filhos</strong></li>
+          <li>Chaves dentro do nó estão sempre <strong>ordenadas</strong></li>
+          <li>Todas as folhas estão no <strong>mesmo nível</strong> (balanceamento perfeito)</li>
+          <li>Cada nó (exceto a raiz) tem no mínimo ⌈m/2⌉ filhos</li>
+        </ul>`,
+        note:'Essas 5 regras é tudo que você precisa saber. Grave: <strong>máx m-1 chaves, máx m filhos</strong>.' },
+
+      { title:'As duas contas que caem em prova', illustration: SVG.arvoreB_ordem,
+        body:'A prova quase sempre pergunta: "dada uma árvore B de ordem m, qual o número máximo de chaves e filhos por nó?" — a resposta é sempre a mesma:',
         html:`<table class="slide-table">
-          <tr><th>Ordem</th><th>Máx chaves</th><th>Máx filhos</th></tr>
+          <tr><th>Ordem m</th><th>Máx chaves</th><th>Máx filhos</th></tr>
           <tr><td>3</td><td>2</td><td>3</td></tr>
           <tr><td>4</td><td>3</td><td>4</td></tr>
           <tr><td>5</td><td>4</td><td>5</td></tr>
-        </table>` },
+          <tr><td>6</td><td>5</td><td>6</td></tr>
+          <tr><td>7</td><td>6</td><td>7</td></tr>
+          <tr><td>8</td><td>7</td><td>8</td></tr>
+        </table>`,
+        note:'Se marcar isso na cabeça, você já ganha alguns pontos garantidos. É o padrão: chaves = m−1, filhos = m.' },
 
-      { title:'Lendo uma struct de nó em C',
-        body:'Uma implementação típica usa:',
-        code:`#define M 4
+      { title:'Descobrindo a ordem pela struct em C',
+        body:'Outra pegadinha clássica: dão uma struct em C e pedem a ordem. Vamos ver.',
+        code:`#define K 4
 struct no {
-    int contador;         // quantas chaves preenchidas
-    int chaves[M-1];      // até M-1 chaves
-    struct no *filhos[M]; // até M filhos
+    int contador;
+    int chaves[2*K - 1];      // = chaves[7]
+    struct no *filhos[2*K];   // = filhos[8]
 };`,
-        note:'Uma pegadinha comum: se o código define <code>chaves[2*K-1]</code> e <code>filhos[2*K]</code> com <code>K=4</code>, temos <strong>7 chaves e 8 filhos</strong> → <strong>ordem 8</strong>.' },
+        note:'<strong>Regra:</strong> a ordem = tamanho do array de filhos. Como <code>filhos[8]</code>, temos <strong>ordem 8</strong>. Confere: máx chaves = 8-1 = 7 → bate com <code>chaves[7]</code>. ✓' },
 
-      { title:'Busca na árvore B',
-        body:'Semelhante à ABB, mas em vez de decidir esquerda/direita, você <strong>percorre as chaves do nó</strong> e desce pro filho correto:',
-        code:`no = raiz;
-enquanto (no != NULL) {
-    i = 0;
-    // avança até achar chave ≥ alvo, ou fim do nó
-    enquanto (i < no.contador && no.chaves[i] < alvo)
-        i++;
-    if (i < no.contador && no.chaves[i] == alvo)
-        return achou;
-    no = no.filhos[i];   // desce pro filho da posição i
-}
-return não achou;` },
+      { title:'Mais um exemplo — treine essa conta',
+        body:'Considere:',
+        code:`#define M 5
+struct no {
+    int contador;
+    int chaves[2*M - 1];        // chaves[9]
+    struct no *ponteiros[2*M];  // ponteiros[10]
+};
 
-      { title:'Inserção — o particionamento', illustration: SVG.split,
-        body:'Regra: sempre inserir em folha. Se a folha está cheia, <strong>divide em duas</strong> e <strong>promove a chave do meio</strong> pro pai.',
-        note:'Se o pai também estava cheio, ele também divide, promove pra avô, e assim por diante. No limite, cria uma nova raiz — é assim que a árvore cresce em altura.' },
+// ordem = tamanho do array de ponteiros = 10
+// máx chaves confere: 10 - 1 = 9 ✓`,
+        note:'Repare que o nome do array (chaves, ponteiros, filhos, sons...) não importa. O que importa é <strong>o tamanho do array que guarda os ponteiros pros filhos</strong>.' },
 
-      { title:'Simulando: inserir 55 numa árvore B ordem 4',
-        body:'Estado antes (ordem 4 = máx 3 chaves por nó):',
-        code:`raiz:        [30, 60]
-              /   |   \\
-         [10 20] [35 40 50] [70 80]
+      { title:'Anatomia de um nó', illustration: SVG.arvoreB_no,
+        body:'Um nó alterna <strong>ponteiro, chave, ponteiro, chave, ...</strong>. Com n chaves, há n+1 ponteiros pros filhos.',
+        note:'O ponteiro p_i aponta pra subárvore com valores <strong>entre a chave[i-1] e a chave[i]</strong>. Ex: p₁ aponta pra chaves entre 10 e 25. p₀ aponta pra chaves &lt; 10. p_last aponta pra chaves &gt; última.' },
 
-Inserir 55 → cai na folha [35, 40, 50]
-Folha cheia! (já tem 3 chaves = máx)
-Ordenar com 55: [35, 40, 50, 55]
-Meio = 50 (ou 40, depende do critério)
-Promove 50 pra raiz
+      { title:'Propriedade crítica: folhas no mesmo nível',
+        body:'Diferente da ABB, todas as folhas da árvore B estão no <strong>mesmo nível de profundidade</strong>. Isso é uma consequência do algoritmo de inserção — a árvore só cresce em altura pela raiz.',
+        code:`Não pode existir:
+              [50]
+              / \\
+           [30]  [70]
+           / \\
+         [20] [40]     ← folha nível 2, mas [70] é folha nível 1 ✗
+
+Sempre:
+             [50]
+             /  \\
+          [30]  [70]   ← todas as folhas no mesmo nível ✓`,
+        note:'Isso é o que garante que toda busca tem o MESMO custo: sempre desce a mesma quantidade de níveis.' },
+
+      /* --------- Busca --------- */
+      { title:'Busca — o algoritmo',
+        body:'Começa na raiz. Dentro do nó, percorre as chaves ordenadas até achar uma ≥ alvo. Se for igual, achou. Se não, desce pro filho da posição.',
+        code:`buscar(no, alvo):
+    se no é NULL:
+        retorna "não achou"
+    i = 0
+    enquanto i < no.contador  E  no.chaves[i] < alvo:
+        i = i + 1
+    se i < no.contador  E  no.chaves[i] == alvo:
+        retorna "achou no nó atual"
+    // desce pro filho i (subárvore que "cobre" o alvo)
+    retorna buscar(no.filhos[i], alvo)` },
+
+      { title:'Busca passo-a-passo', illustration: SVG.busca_arvB,
+        body:'Buscar <strong>45</strong> na árvore B mostrada:',
+        html:`<ol class="slide-list numbered">
+          <li>Na raiz [20, 50, 70]: percorre chaves. 20 &lt; 45 (continua). 50 ≥ 45 (para). i = 1.</li>
+          <li>45 ≠ 50, então desce pelo filho da posição 1 (o do meio).</li>
+          <li>No filho [30, 45]: percorre. 30 &lt; 45 (continua). 45 ≥ 45 (para). i = 1.</li>
+          <li>45 == 45 → achou! Retorna sucesso.</li>
+        </ol>`,
+        note:'Só 2 níveis descidos = 2 acessos ao disco. Numa AVL com o mesmo número de chaves seria muito mais.' },
+
+      /* --------- Inserção --------- */
+      { title:'Inserção — a regra geral',
+        body:'Toda inserção começa igual: <strong>busca pela folha onde a chave deveria estar</strong> (mesmo algoritmo da busca, mas desce até a folha).',
+        html:`<div class="slide-body" style="font-size:20px;">Chegando na folha, temos 3 casos:</div>
+        <ol class="slide-list numbered">
+          <li>Folha com espaço → só insere em ordem. FIM.</li>
+          <li>Folha cheia → <strong>split</strong>: divide em duas, promove chave do meio pro pai.</li>
+          <li>Pai também cheio → split recursivo. Pode chegar até a raiz e criar novo nível.</li>
+        </ol>`,
+        note:'Isso é o que garante que a árvore permanece balanceada e todas as folhas ficam no mesmo nível.' },
+
+      { title:'Caso 1: folha com espaço (o fácil)', illustration: SVG.insercao_facil,
+        body:'Você chega na folha, ela ainda tem espaço (menos que m-1 chaves). Basta inserir no lugar certo pra manter a ordem.',
+        note:'Nenhum split, nenhuma promoção, nada estranho. Este é o caso mais comum na maioria das inserções.' },
+
+      { title:'Caso 2: folha cheia → split simples', illustration: SVG.split,
+        body:'A folha já tem m-1 chaves. Adicionar mais uma exigiria m chaves — proibido. Solução: <strong>particionar</strong>.',
+        html:`<ol class="slide-list numbered">
+          <li>Insere a nova chave "hipoteticamente" — o nó fica com m chaves temporariamente</li>
+          <li>Escolhe a chave do MEIO (posição ⌈m/2⌉)</li>
+          <li>Promove essa chave pro pai</li>
+          <li>Divide o resto em duas novas folhas: esquerda com as menores, direita com as maiores</li>
+        </ol>`,
+        note:'Se o pai tinha espaço, acaba aqui. O pai fica com 1 chave a mais e 1 filho a mais.' },
+
+      { title:'Caso 3: split em cascata (a raiz cresce)', illustration: SVG.split_cascata,
+        body:'E se o pai também estava cheio? Ele também dá split, promove SUA chave do meio pro avô. Isso pode se propagar até a raiz.',
+        note:'Se a raiz for particionada, a chave do meio dela vira uma <strong>nova raiz sozinha</strong> — a altura da árvore cresce em 1. É a ÚNICA forma da árvore B ganhar altura.' },
+
+      /* --------- Exemplo completo --------- */
+      { title:'Exemplo completo — construindo B ordem 4 do zero',
+        body:'Vamos inserir 10, 20, 30, 40, 50 em sequência. Ordem 4 → máx 3 chaves por nó.',
+        code:`Inserir 10:  [10]
+
+Inserir 20:  [10, 20]
+
+Inserir 30:  [10, 20, 30]   ← nó cheio
+
+Inserir 40:  primeiro fica [10, 20, 30, 40] (temporário)
+             meio (posição 2) = 20 → sobe
+             sobra: esquerda [10]  direita [30, 40]
+
+             Estado:      [20]
+                         /    \\
+                       [10]  [30, 40]
+
+Inserir 50:  50 > 20 → desce direita → [30, 40] tem espaço
+             fica: [30, 40, 50]
+
+             Estado:      [20]
+                         /    \\
+                       [10]  [30, 40, 50]` },
+
+      { title:'Continuando: inserir 60, 70, 80',
+        body:'',
+        code:`Inserir 60:  60 > 20 → direita → [30, 40, 50] CHEIO
+             fica temp [30, 40, 50, 60] → meio = 40 sobe
+             sobra: [30]  e  [50, 60]
+
+             Estado:     [20, 40]
+                        /   |    \\
+                     [10] [30]  [50, 60]
+
+Inserir 70:  70 > 40 → direita → [50, 60] tem espaço
+             fica: [50, 60, 70]
+
+Inserir 80:  80 > 40 → direita → [50, 60, 70] CHEIO
+             fica temp [50, 60, 70, 80] → meio = 60 sobe
+             sobra: [50]  e  [70, 80]
+
+             Estado:    [20, 40, 60]
+                        / | | \\
+                     [10][30][50][70,80]` },
+
+      { title:'O momento clássico da prova — inserir 55',
+        body:'Considere esta árvore B ordem 4 (retirada de um enunciado típico):',
+        code:`raiz:      [30, 60]
+           /    |    \\
+     [10 20] [35 40 50] [70 80]
+
+Vamos inserir 55.
+
+Passo 1 — buscar folha:
+  na raiz: 30 < 55 e 60 > 55 → desce filho do meio
+  chega em [35, 40, 50] — folha CHEIA
+
+Passo 2 — split:
+  temp: [35, 40, 50, 55]     ← insere 55 em ordem
+  posição do meio (⌈4/2⌉ = 2, contando de 1) = 50
+  promove 50 pra raiz
+  sobra: esquerda [35, 40]   direita [55]
+
+Passo 3 — atualizar raiz:
+  raiz recebe 50 na posição correta: [30, 50, 60]
+  raiz tinha 2 chaves, agora tem 3 (cabe)`,
+        note:'<strong>Estado final: raiz [30, 50, 60]</strong> — foi essa a resposta correta da prova.' },
+
+      { title:'Estado final visual',
+        body:'',
+        code:`Depois de inserir 55:
 
 raiz:      [30, 50, 60]
-           /   |    |   \\
-       [10 20] [35 40] [55] [70 80]`,
-        note:'Detalhe crítico: o "meio" para 4 itens é o 2º (índice ⌈m/2⌉). Diferentes livros usam critérios ligeiramente diferentes.' },
+           /  |   |   \\
+      [10,20][35,40][55][70,80]
 
-      { title:'Árvore B+ — variação para arquivos',
-        body:'Extensão comum:',
+- A raiz cresceu de 2 pra 3 chaves
+- A folha que estava cheia foi dividida em duas
+- Todas as folhas continuam no mesmo nível (invariante da árvore B)`,
+        note:'Resposta da prova: raiz vira <strong>[30, 50, 60]</strong>. Esta é uma das opções mais comuns em provas com árvore B ordem 4.' },
+
+      { title:'Qual chave é o "meio"?',
+        body:'Existe uma pequena variação entre livros sobre qual chave promover. As duas convenções mais comuns:',
+        html:`<table class="slide-table">
+          <tr><th>Ordem</th><th>Após inserir → n chaves</th><th>Meio-esquerda (⌊n/2⌋)</th><th>Meio-direita (⌈n/2⌉)</th></tr>
+          <tr><td>3</td><td>3</td><td>1ª</td><td>2ª</td></tr>
+          <tr><td>4</td><td>4</td><td>2ª</td><td>2ª (par)</td></tr>
+          <tr><td>5</td><td>5</td><td>2ª</td><td>3ª</td></tr>
+          <tr><td>6</td><td>6</td><td>3ª</td><td>3ª (par)</td></tr>
+        </table>`,
+        note:'Para ordem par (4, 6...) as duas convenções dão a mesma resposta. Para ordem ímpar (3, 5...), pode diferir em uma posição. Na prática, ambas geram árvores B válidas. Na dúvida, prefira o meio-esquerda.' },
+
+      /* --------- Remoção (leve) --------- */
+      { title:'Remoção — a visão geral',
+        body:'Remoção é a operação mais complicada — não vou detalhar aqui. A ideia:',
+        html:`<ol class="slide-list numbered">
+          <li>Se a chave está em uma folha e a folha ficaria com o mínimo de chaves ainda respeitado → só apaga.</li>
+          <li>Se a chave está em nó interno → substitui pelo sucessor imediato (menor chave da subárvore direita) e apaga da folha original.</li>
+          <li>Se apagar deixaria o nó abaixo do mínimo → <strong>redistribui</strong> com o irmão (empresta uma chave) ou <strong>funde</strong> irmãos + puxa uma chave do pai.</li>
+        </ol>`,
+        note:'Fusão pode se propagar pra cima também, encurtando a árvore em 1 nível. Simétrico do split.' },
+
+      /* --------- B+ --------- */
+      { title:'Árvore B+ — a variante que os bancos amam',
+        body:'A B+ tem duas diferenças importantes em relação à B "clássica":',
+        html:`<ol class="slide-list numbered">
+          <li>Nós internos guardam <strong>apenas chaves-índice</strong> (não guardam dados nem ponteiros pra registros).</li>
+          <li>Todas as chaves e dados reais ficam nas <strong>folhas</strong>.</li>
+          <li>As folhas são <strong>ligadas em lista encadeada</strong>, permitindo varredura sequencial ordenada muito rápida.</li>
+        </ol>`,
+        note:'É por isso que PostgreSQL, MySQL, SQLite, Oracle — todos usam B+ nos índices. <code>SELECT * WHERE id BETWEEN 100 AND 200</code> segue os ponteiros da lista de folhas — leitura sequencial no disco.' },
+
+      { title:'Onde árvores B rodam no mundo real',
+        body:'',
         html:`<ul class="slide-list">
-          <li>Chaves duplicadas em nós internos <strong>e</strong> em folhas</li>
-          <li>Só as folhas guardam ponteiros pra dados reais</li>
-          <li>Folhas são <strong>ligadas em lista</strong> — varredura em ordem é O(n)</li>
+          <li><strong>Bancos de dados</strong>: PostgreSQL, MySQL/InnoDB, SQL Server, Oracle → índices em B+</li>
+          <li><strong>Sistemas de arquivos</strong>: NTFS (Windows), HFS+/APFS (Mac), Btrfs, ext4 → estruturas B/B+ pra localizar arquivos</li>
+          <li><strong>Key-value stores</strong>: BerkeleyDB, LMDB</li>
+          <li><strong>SQLite</strong>: banco inteiro é uma árvore B armazenada num único arquivo</li>
         </ul>`,
-        note:'É o que a maioria dos bancos de dados usa em índices (PostgreSQL, MySQL, SQLite...).' },
+        note:'Você usa árvore B toda vez que abre um arquivo, faz uma consulta SQL, ou até roda o Git (que usa uma variante). Uma das estruturas mais importantes da computação.' },
 
       { title:'Fim da Unidade V',
-        body:'ABB é boa em RAM se balanceada. AVL garante isso. Árvore B leva o balanceamento pra memória externa, com nós largos que combinam com blocos de disco.',
-        note:'Prova costuma ter: inserção em árvore B com particionamento, e cálculo de ordem a partir da struct.' }
+        body:'Você agora sabe: por que árvore B existe, como calcular sua ordem, como buscar, e — principalmente — <strong>como inserir com particionamento</strong>. Esses são os 3 tópicos que caem em quase todas as provas.',
+        note:'Vá para <strong>Questões</strong> e faça as do simulado de prova. Elas cobrem exatamente esses casos.' }
     ]
   },
 
