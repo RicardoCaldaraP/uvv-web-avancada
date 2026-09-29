@@ -6,14 +6,15 @@ const INTERACTIVE = {};
 
 
 /* =========================================================
-   1) ÁRVORE B INTERATIVA
+   1) ÁRVORE B INTERATIVA — com inserção, remoção e snapshot
    ========================================================= */
 
 class BTree {
   constructor(order) {
-    this.order = order;                                 // m
+    this.order = order;                 // m
     this.root = { keys: [], children: [] };
-    this.maxKeys = order - 1;
+    this.maxKeys = order - 1;           // m - 1
+    this.minKeys = Math.ceil(order / 2) - 1;   // ⌈m/2⌉ - 1 (para não-raiz)
   }
 
   isLeaf(node) { return node.children.length === 0; }
@@ -28,8 +29,18 @@ class BTree {
     return this._find(node.children[i], key);
   }
 
+  clone() {
+    const c = new BTree(this.order);
+    c.root = this._cloneNode(this.root);
+    return c;
+  }
+  _cloneNode(n) {
+    return { keys: [...n.keys], children: n.children.map(ch => this._cloneNode(ch)) };
+  }
+
+  // ============= INSERÇÃO =============
   insert(key) {
-    if (this.contains(key)) return { duplicate: true };
+    if (this.contains(key)) return { duplicate: true, log: [] };
     const log = [];
     const result = this._ins(this.root, key, log);
     if (result.split) {
@@ -47,7 +58,7 @@ class BTree {
       let i = 0;
       while (i < node.keys.length && node.keys[i] < key) i++;
       node.keys.splice(i, 0, key);
-      log.push(`Inseriu ${this._fmt(key)} na folha → [${node.keys.map(k=>this._fmt(k)).join(', ')}]`);
+      log.push(`Inseriu ${key} na folha → [${node.keys.join(', ')}]`);
       if (node.keys.length > this.maxKeys) return this._split(node, log);
       return { split: false };
     }
@@ -58,15 +69,15 @@ class BTree {
       node.keys.splice(i, 0, result.middleKey);
       node.children[i] = result.left;
       node.children.splice(i + 1, 0, result.right);
-      log.push(`Promoveu ${this._fmt(result.middleKey)} pra pai → [${node.keys.map(k=>this._fmt(k)).join(', ')}]`);
+      log.push(`Promoveu ${result.middleKey} pro pai → [${node.keys.join(', ')}]`);
       if (node.keys.length > this.maxKeys) return this._split(node, log);
     }
     return { split: false };
   }
 
   _split(node, log) {
-    // node tem order keys → estourou. usa meio-esquerda (⌊n/2⌋)
-    const midIdx = Math.floor((node.keys.length - 1) / 2);
+    // node tem m chaves (estourou). Usa meio-direita: floor(n/2)
+    const midIdx = Math.floor(node.keys.length / 2);
     const middleKey = node.keys[midIdx];
     const left = {
       keys: node.keys.slice(0, midIdx),
@@ -76,19 +87,112 @@ class BTree {
       keys: node.keys.slice(midIdx + 1),
       children: node.children.length ? node.children.slice(midIdx + 1) : []
     };
-    log.push(`Nó cheio → split. Sobe ${this._fmt(middleKey)}. Esq=[${left.keys.map(k=>this._fmt(k)).join(', ')}], Dir=[${right.keys.map(k=>this._fmt(k)).join(', ')}]`);
+    log.push(`Nó cheio → split. Meio = ${middleKey} sobe. Esq=[${left.keys.join(', ')}], Dir=[${right.keys.join(', ')}]`);
     return { split: true, middleKey, left, right };
   }
 
-  _fmt(k) { return k; }
+  // ============= REMOÇÃO =============
+  remove(key) {
+    if (!this.contains(key)) return { notFound: true, log: [] };
+    const log = [];
+    this._del(this.root, key, log);
+    // Se raiz ficou vazia e tem 1 filho, o filho vira nova raiz (altura diminui)
+    if (this.root.keys.length === 0 && !this.isLeaf(this.root)) {
+      this.root = this.root.children[0];
+      log.push('Raiz ficou vazia → filho único vira nova raiz. Altura diminuiu.');
+    }
+    return { log };
+  }
 
-  // ---------- LAYOUT ----------
-  // Computes { positions: [{node, x, y, w}], edges: [{fromX, fromY, toX, toY}], width, height }
+  _del(node, key, log) {
+    let i = 0;
+    while (i < node.keys.length && node.keys[i] < key) i++;
+
+    if (i < node.keys.length && node.keys[i] === key) {
+      // achou aqui neste nó
+      if (this.isLeaf(node)) {
+        // Caso 1: chave em folha
+        node.keys.splice(i, 1);
+        log.push(`Removeu ${key} da folha → [${node.keys.join(', ') || '(vazia)'}]`);
+      } else {
+        // Caso 2: chave em nó interno — troca com predecessor da subárvore esquerda
+        const pred = this._maxKeyOf(node.children[i]);
+        log.push(`${key} está em nó interno → troca com predecessor ${pred} (folha à esquerda).`);
+        node.keys[i] = pred;
+        this._del(node.children[i], pred, log);
+        // após remover pred, filho pode ter ficado curto
+        this._fixUnderflow(node, i, log);
+      }
+    } else {
+      // desce
+      if (this.isLeaf(node)) return; // não achou (não deveria acontecer, já checou contains)
+      this._del(node.children[i], key, log);
+      this._fixUnderflow(node, i, log);
+    }
+  }
+
+  _maxKeyOf(node) {
+    while (!this.isLeaf(node)) node = node.children[node.children.length - 1];
+    return node.keys[node.keys.length - 1];
+  }
+
+  _fixUnderflow(parent, idx, log) {
+    const child = parent.children[idx];
+    const isRoot = (parent === this.root);
+    // raiz não tem mínimo — só as outras páginas
+    if (child.keys.length >= this.minKeys) return;
+
+    // tenta redistribuir com irmão esquerdo
+    if (idx > 0 && parent.children[idx - 1].keys.length > this.minKeys) {
+      const leftSib = parent.children[idx - 1];
+      // move chave separadora pra frente do filho
+      child.keys.unshift(parent.keys[idx - 1]);
+      // move último de leftSib pra chave separadora
+      parent.keys[idx - 1] = leftSib.keys.pop();
+      // e se tem filhos, move o último do leftSib pra frente dos filhos do child
+      if (!this.isLeaf(child)) child.children.unshift(leftSib.children.pop());
+      log.push(`Redistribuiu do irmão esquerdo para filho[${idx}]. Nova chave sep: ${parent.keys[idx - 1]}.`);
+      return;
+    }
+
+    // tenta redistribuir com irmão direito
+    if (idx < parent.children.length - 1 && parent.children[idx + 1].keys.length > this.minKeys) {
+      const rightSib = parent.children[idx + 1];
+      child.keys.push(parent.keys[idx]);
+      parent.keys[idx] = rightSib.keys.shift();
+      if (!this.isLeaf(child)) child.children.push(rightSib.children.shift());
+      log.push(`Redistribuiu do irmão direito para filho[${idx}]. Nova chave sep: ${parent.keys[idx]}.`);
+      return;
+    }
+
+    // concatenação (merge) com um irmão
+    if (idx > 0) {
+      // concatena com esquerdo: leftSib + chave sep + child
+      const leftSib = parent.children[idx - 1];
+      const sep = parent.keys[idx - 1];
+      leftSib.keys.push(sep, ...child.keys);
+      if (!this.isLeaf(leftSib)) leftSib.children.push(...child.children);
+      parent.keys.splice(idx - 1, 1);
+      parent.children.splice(idx, 1);
+      log.push(`Concatenação: filho[${idx}] fundido com irmão esquerdo (via ${sep}).`);
+    } else {
+      // concatena com direito
+      const rightSib = parent.children[idx + 1];
+      const sep = parent.keys[idx];
+      child.keys.push(sep, ...rightSib.keys);
+      if (!this.isLeaf(child)) child.children.push(...rightSib.children);
+      parent.keys.splice(idx, 1);
+      parent.children.splice(idx + 1, 1);
+      log.push(`Concatenação: filho[${idx}] fundido com irmão direito (via ${sep}).`);
+    }
+  }
+
+  // ============= LAYOUT / SVG =============
   layout(mode = 'numbers') {
     const CELL_W = mode === 'letters' ? 40 : 44;
     const CELL_H = 40;
-    const LEVEL_GAP = 70;
-    const NODE_GAP = 30;
+    const LEVEL_GAP = 68;
+    const NODE_GAP = 24;
 
     const measure = (node) => {
       const nodeW = Math.max(CELL_W, node.keys.length * CELL_W);
@@ -101,7 +205,6 @@ class BTree {
       node._w = Math.max(nodeW, childW);
       return node._w;
     };
-
     measure(this.root);
 
     const positions = [];
@@ -120,7 +223,6 @@ class BTree {
           const childY = y + LEVEL_GAP;
           const childNodeW = Math.max(CELL_W, c.keys.length * CELL_W);
           const childX = cx + (c._w - childNodeW) / 2;
-          // linha do canto inferior do pai (posição do filho i) até topo do filho
           const parentAnchorX = nodeX + (nodeW * (i + 0.5)) / (node.keys.length + 1);
           edges.push({
             fromX: parentAnchorX,
@@ -133,45 +235,41 @@ class BTree {
         });
       }
     };
-
     place(this.root, 0, 0, 0);
+
     const totalWidth = this.root._w;
     const totalHeight = (maxDepth + 1) * (CELL_H + LEVEL_GAP) - LEVEL_GAP + 10;
     return { positions, edges, width: totalWidth, height: totalHeight };
   }
 
-  renderSVG(mode = 'numbers') {
+  renderSVG(mode = 'numbers', small = false) {
     if (this.root.keys.length === 0) {
-      return `<div class="tree-empty">Árvore vazia. Insira uma chave.</div>`;
+      return `<div class="tree-empty">${small ? '(vazia)' : 'Árvore vazia. Insira uma ou mais chaves.'}</div>`;
     }
     const layout = this.layout(mode);
-    const pad = 20;
+    const pad = 14;
     const W = layout.width + pad * 2;
     const H = layout.height + pad * 2;
 
-    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">`;
+    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace" style="font-size:${small?'11':'14'}px;">`;
 
-    // arestas
     layout.edges.forEach(e => {
-      svg += `<path d="M ${e.fromX + pad} ${e.fromY + pad} L ${e.toX + pad} ${e.toY + pad}" stroke="#7c9cff" stroke-width="1.5" fill="none" opacity="0.6"/>`;
+      svg += `<path d="M ${e.fromX + pad} ${e.fromY + pad} L ${e.toX + pad} ${e.toY + pad}" stroke="#7c9cff" stroke-width="1.5" fill="none" opacity="0.55"/>`;
     });
 
-    // nós
     layout.positions.forEach(p => {
       const isRoot = p.depth === 0;
       const isLeaf = this.isLeaf(p.node);
       const color = isRoot ? '#fbbf24' : (isLeaf ? '#4ade80' : '#7c9cff');
       svg += `<g>`;
       svg += `<rect x="${p.x + pad}" y="${p.y + pad}" width="${p.w}" height="${p.cellH}" rx="6" fill="#1c1c25" stroke="${color}" stroke-width="2"/>`;
-      // linhas verticais entre chaves
       for (let i = 1; i < p.node.keys.length; i++) {
         const lx = p.x + pad + (i * p.w) / p.node.keys.length;
         svg += `<line x1="${lx}" y1="${p.y + pad}" x2="${lx}" y2="${p.y + pad + p.cellH}" stroke="${color}" stroke-width="1" opacity="0.5"/>`;
       }
-      // chaves
       p.node.keys.forEach((k, i) => {
         const kx = p.x + pad + ((i + 0.5) * p.w) / p.node.keys.length;
-        svg += `<text x="${kx}" y="${p.y + pad + p.cellH/2 + 5}" text-anchor="middle" fill="#f0f0f5" font-size="14" font-weight="600">${k}</text>`;
+        svg += `<text x="${kx}" y="${p.y + pad + p.cellH/2 + 5}" text-anchor="middle" fill="#f0f0f5" font-weight="600">${k}</text>`;
       });
       svg += `</g>`;
     });
@@ -181,86 +279,92 @@ class BTree {
   }
 }
 
-/* --- Render do widget de árvore B --- */
+
 INTERACTIVE.btree = function(container) {
   const state = {
     order: 4,
-    mode: 'numbers',   // 'numbers' | 'letters'
+    mode: 'numbers',
     tree: new BTree(4),
-    log: []
+    log: [],
+    previous: null,          // snapshot antes da última operação
+    lastAction: null         // string descrevendo a ação (ex: "inseriu 55")
   };
 
-  function nextValidInput() {
-    if (state.mode === 'numbers') {
-      return Math.floor(Math.random() * 90) + 10;   // 10-99
-    } else {
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      return letters[Math.floor(Math.random() * letters.length)];
-    }
+  function isValidKey(k) {
+    if (state.mode === 'numbers') return /^-?\d+$/.test(k.trim());
+    return /^[A-Za-z]$/.test(k.trim());
+  }
+  function normalizeKey(k) {
+    if (state.mode === 'numbers') return parseInt(k.trim(), 10);
+    return k.trim().toUpperCase();
+  }
+  function parseKeys(raw) {
+    return raw.split(/[\s,]+/).filter(x => x.length > 0);
   }
 
-  function insertPreset(preset) {
-    state.tree = new BTree(state.order);
-    state.log = [];
-    preset.forEach(k => {
+  function insertMany(raw) {
+    const parts = parseKeys(raw);
+    if (parts.length === 0) return;
+    const invalid = parts.filter(p => !isValidKey(p));
+    if (invalid.length) { alert('Chaves inválidas: ' + invalid.join(', ')); return; }
+    state.previous = state.tree.clone();
+    state.lastAction = 'Inseriu: ' + parts.join(', ');
+    parts.forEach(p => {
+      const k = normalizeKey(p);
       const r = state.tree.insert(k);
-      if (r.log) state.log.push(...r.log.map(l => `[${k}] ${l}`));
+      if (r.duplicate) state.log.push(`⚠ ${k} já existe → ignorado.`);
+      else state.log.push(...r.log.map(l => `[+${k}] ${l}`));
     });
     render();
   }
 
-  function insertKey(rawKey) {
-    let key;
-    if (state.mode === 'numbers') {
-      key = parseInt(rawKey, 10);
-      if (isNaN(key)) { alert('Digite um número.'); return; }
-    } else {
-      key = String(rawKey).toUpperCase().trim();
-      if (!/^[A-Z]$/.test(key)) { alert('Digite uma letra de A a Z.'); return; }
-    }
-    const r = state.tree.insert(key);
-    if (r.duplicate) {
-      state.log.push(`[${key}] Chave já existe → ignorada.`);
-    } else if (r.log) {
-      state.log.push(...r.log.map(l => `[${key}] ${l}`));
-    }
+  function removeKey(raw) {
+    if (!raw.trim()) return;
+    if (!isValidKey(raw)) { alert('Chave inválida.'); return; }
+    const k = normalizeKey(raw);
+    if (!state.tree.contains(k)) { alert(`${k} não existe na árvore.`); return; }
+    state.previous = state.tree.clone();
+    state.lastAction = 'Removeu: ' + k;
+    const r = state.tree.remove(k);
+    state.log.push(...r.log.map(l => `[−${k}] ${l}`));
     render();
   }
 
   function reset() {
     state.tree = new BTree(state.order);
     state.log = [];
+    state.previous = null;
+    state.lastAction = null;
     render();
   }
 
   function changeOrder(m) {
     state.order = m;
-    state.tree = new BTree(m);
-    state.log = [];
-    render();
+    reset();
   }
 
   function changeMode(mode) {
     state.mode = mode;
-    state.tree = new BTree(state.order);
-    state.log = [];
-    render();
+    reset();
   }
 
-  function render() {
-    const presetsNum = {
-      '4': [10, 20, 30, 40, 50, 60, 70, 80],
-      '3': [1, 2, 3, 4, 5, 6, 7],
-      '5': [10, 20, 5, 40, 30, 25, 45, 50, 60, 70],
-      '6': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    };
-    const presetsLet = {
-      '4': ['C','N','G','A','H','E','K','Q','M','F','W'],
-      '3': ['B','A','C','D','E','F','G'],
-      '5': ['M','A','R','C','O','P','L','E','B'],
-      '6': ['A','B','C','D','E','F','G','H','I','J','K','L']
-    };
+  const PRESETS = {
+    numbers: {
+      3: '1, 2, 3, 4, 5, 6, 7',
+      4: '10, 20, 30, 40, 50, 60, 70, 80',
+      5: '10, 20, 5, 40, 30, 25, 45, 50, 60, 70',
+      6: '10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110'
+    },
+    letters: {
+      3: 'M, A, B, C, X, D, E',
+      4: 'C, N, G, A, H, E, K, Q, M, F, W',
+      5: 'M, A, R, C, O, P, L, E, B, K',
+      6: 'A, B, C, D, E, F, G, H, I, J, K, L, M'
+    }
+  };
 
+  function render() {
+    const minK = state.tree.minKeys;
     container.innerHTML = `
       <div class="itv-controls">
         <div class="itv-group">
@@ -276,18 +380,24 @@ INTERACTIVE.btree = function(container) {
             <button class="itv-btn ${state.mode==='letters'?'active':''}" data-mode="letters">Letras</button>
           </div>
         </div>
-        <div class="itv-group">
-          <label>Inserir chave</label>
+        <div class="itv-group" style="flex:1; min-width:220px;">
+          <label>Inserir (uma ou várias, separadas por vírgula ou espaço)</label>
           <div class="itv-input-row">
-            <input type="text" id="itv-key-input" placeholder="${state.mode==='numbers'?'ex: 42':'ex: K'}" maxlength="${state.mode==='numbers'?3:1}"/>
-            <button class="itv-btn primary" id="itv-insert">Inserir</button>
-            <button class="itv-btn" id="itv-random">🎲 Aleatório</button>
+            <input type="text" id="itv-ins" placeholder="${state.mode==='numbers'?'ex: 10, 20 30 55':'ex: A B, C, M'}" style="flex:1;"/>
+            <button class="itv-btn primary" id="itv-ins-btn">Inserir</button>
+          </div>
+        </div>
+        <div class="itv-group">
+          <label>Remover uma chave</label>
+          <div class="itv-input-row">
+            <input type="text" id="itv-rem" placeholder="${state.mode==='numbers'?'ex: 55':'ex: M'}" maxlength="${state.mode==='numbers'?4:1}"/>
+            <button class="itv-btn danger" id="itv-rem-btn">Remover</button>
           </div>
         </div>
         <div class="itv-group">
           <label>Ações</label>
           <div class="itv-btns">
-            <button class="itv-btn" id="itv-preset">Exemplo pré-pronto</button>
+            <button class="itv-btn" id="itv-preset">Exemplo</button>
             <button class="itv-btn danger" id="itv-reset">Limpar</button>
           </div>
         </div>
@@ -295,38 +405,60 @@ INTERACTIVE.btree = function(container) {
 
       <div class="itv-info">
         Ordem ${state.order} → cada nó tem no máx <strong>${state.order-1} chaves</strong> e <strong>${state.order} filhos</strong>.
+        Mínimo por nó (exceto raiz): <strong>⌈${state.order}/2⌉ − 1 = ${minK} chave${minK>1?'s':''}</strong>.
       </div>
 
+      ${state.previous ? `
+        <div class="itv-beforeafter">
+          <div class="itv-ba-col">
+            <div class="itv-ba-label">Antes</div>
+            <div class="itv-canvas small">${state.previous.renderSVG(state.mode, true)}</div>
+          </div>
+          <div class="itv-ba-arrow">
+            <div>${state.lastAction || ''}</div>
+            <div class="itv-ba-arrow-shape">→</div>
+          </div>
+          <div class="itv-ba-col">
+            <div class="itv-ba-label">Depois</div>
+            <div class="itv-canvas small">${state.tree.renderSVG(state.mode, true)}</div>
+          </div>
+        </div>
+      ` : ''}
+
       <div class="itv-canvas">
+        <div class="itv-canvas-label">Árvore atual</div>
         ${state.tree.renderSVG(state.mode)}
       </div>
 
       <div class="itv-log">
         <div class="itv-log-title">Histórico de operações</div>
         <div class="itv-log-body">
-          ${state.log.length ? state.log.slice(-8).map(l => `<div>${l}</div>`).join('') : '<div class="dim">Sem operações ainda.</div>'}
+          ${state.log.length ? state.log.slice(-10).map(l => `<div>${l}</div>`).join('') : '<div class="dim">Sem operações ainda.</div>'}
         </div>
       </div>
     `;
 
-    // wire up
     container.querySelectorAll('[data-order]').forEach(b => {
       b.onclick = () => changeOrder(parseInt(b.dataset.order));
     });
     container.querySelectorAll('[data-mode]').forEach(b => {
       b.onclick = () => changeMode(b.dataset.mode);
     });
-    container.querySelector('#itv-insert').onclick = () => {
-      const inp = container.querySelector('#itv-key-input');
-      if (inp.value.trim()) { insertKey(inp.value); inp.value = ''; inp.focus(); }
+    const insInput = container.querySelector('#itv-ins');
+    container.querySelector('#itv-ins-btn').onclick = () => {
+      if (insInput.value.trim()) { insertMany(insInput.value); insInput.value = ''; insInput.focus(); }
     };
-    container.querySelector('#itv-random').onclick = () => insertKey(nextValidInput());
-    container.querySelector('#itv-key-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') container.querySelector('#itv-insert').click();
-    });
+    insInput.addEventListener('keydown', e => { if (e.key === 'Enter') container.querySelector('#itv-ins-btn').click(); });
+
+    const remInput = container.querySelector('#itv-rem');
+    container.querySelector('#itv-rem-btn').onclick = () => {
+      if (remInput.value.trim()) { removeKey(remInput.value); remInput.value = ''; remInput.focus(); }
+    };
+    remInput.addEventListener('keydown', e => { if (e.key === 'Enter') container.querySelector('#itv-rem-btn').click(); });
+
     container.querySelector('#itv-preset').onclick = () => {
-      const p = state.mode === 'numbers' ? presetsNum[state.order] : presetsLet[state.order];
-      insertPreset(p);
+      reset();
+      insertMany(PRESETS[state.mode][state.order]);
     };
     container.querySelector('#itv-reset').onclick = reset;
   }
@@ -336,16 +468,11 @@ INTERACTIVE.btree = function(container) {
 
 
 /* =========================================================
-   2) CALCULADORA DE ORDENAÇÃO EXTERNA
+   2) CALCULADORA DE ORDENAÇÃO EXTERNA (mantida)
    ========================================================= */
 
 INTERACTIVE.extsort = function(container) {
-  const state = {
-    N: 1000,
-    m: 100,
-    f: 4,
-    selecao: false
-  };
+  const state = { N: 1000, m: 100, f: 4, selecao: false };
 
   function calc() {
     const effMin = state.selecao ? state.m * 2 : state.m;
@@ -407,7 +534,7 @@ INTERACTIVE.extsort = function(container) {
         <div class="itv-formula-title">Fórmula</div>
         <code>P = ⌈log_${state.f} (${state.N}/${state.selecao?state.m*2:state.m})⌉ + 1
   = ⌈log_${state.f} (${(state.N/(state.selecao?state.m*2:state.m)).toFixed(2)})⌉ + 1
-  = ⌈${Math.log(state.N/(state.selecao?state.m*2:state.m))/Math.log(state.f)|0}⌉ + 1
+  = ⌈${(Math.log(state.N/(state.selecao?state.m*2:state.m))/Math.log(state.f)).toFixed(2)}⌉ + 1
   = <strong>${r.passes}</strong> passadas</code>
       </div>
 
@@ -443,18 +570,14 @@ INTERACTIVE.extsort = function(container) {
 
 
 /* =========================================================
-   3) VISUALIZADOR DE RECURSÃO — pilha vs cauda
+   3) VISUALIZADOR DE RECURSÃO — pilha vs cauda (mantido)
    ========================================================= */
 
 INTERACTIVE.recursion = function(container) {
-  const state = {
-    n: 5,
-    mode: 'comum'   // 'comum' | 'cauda'
-  };
+  const state = { n: 5, mode: 'comum' };
 
   function render() {
     const n = state.n;
-    // Simula empilhamento
     const frames = [];
     for (let i = n; i >= 1; i--) frames.push(i);
 
@@ -473,7 +596,6 @@ INTERACTIVE.recursion = function(container) {
           <span class="rec-pending">acumulando: ${1}</span>
         </div>
       `;
-      // Show mutation of the same frame
       let acc = 1;
       const steps = [];
       for (let i = n; i >= 1; i--) {
@@ -488,7 +610,6 @@ INTERACTIVE.recursion = function(container) {
       `;
     }
 
-    // Compute the result
     let result = 1;
     for (let i = 1; i <= n; i++) result *= i;
 

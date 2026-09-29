@@ -1351,6 +1351,48 @@ Sempre:
           [30]  [70]   ← todas as folhas no mesmo nível ✓`,
         note:'Isso é o que garante que toda busca tem o MESMO custo: sempre desce a mesma quantidade de níveis.' },
 
+      /* --------- NOVO: mínimo de chaves (das notas de aula) --------- */
+      { title:'A outra conta: mínimo de chaves por nó',
+        body:'Não é só o máximo que importa. Toda página <strong>exceto a raiz</strong> tem um <em>mínimo</em> de chaves. Isso mantém a árvore compacta e evita nós quase-vazios.',
+        html:`<table class="slide-table">
+          <tr><th>Ordem m</th><th>Máx chaves (m−1)</th><th>Mín chaves não-raiz (⌈m/2⌉ − 1)</th><th>Mín filhos (⌈m/2⌉)</th></tr>
+          <tr><td>3</td><td>2</td><td>1</td><td>2</td></tr>
+          <tr><td>4</td><td>3</td><td>1</td><td>2</td></tr>
+          <tr><td>5</td><td>4</td><td>2</td><td>3</td></tr>
+          <tr><td>6</td><td>5</td><td>2</td><td>3</td></tr>
+          <tr><td>7</td><td>6</td><td>3</td><td>4</td></tr>
+          <tr><td>8</td><td>7</td><td>3</td><td>4</td></tr>
+        </table>`,
+        note:'A raiz é exceção: pode ter só 1 chave. O mínimo garante ocupação ≥ 50% em cada página — desperdício de bloco é limitado.' },
+
+      /* --------- NOVO: altura no pior caso (inspirado nas notas de aula) --------- */
+      { title:'Altura da árvore no pior caso',
+        body:'Se pegarmos o pior cenário — todos os nós no mínimo de descendentes — chegamos a uma cota superior pra altura da árvore em função de N (número de chaves).',
+        code:`Para uma árvore B de ordem m com N chaves:
+
+    d ≤ 1 + log_(⌈m/2⌉) ((N+1) / 2)
+
+Exemplo prático:
+    N = 1.000.000 chaves
+    m = 512
+
+    d ≤ 1 + log_256 (500.000,5)
+    d ≤ 1 + 2,37 ≈ 3,37
+
+    → No máximo 4 acessos ao disco pra buscar qualquer chave.`,
+        note:'É esse achatamento que faz a árvore B ser imbatível pra memória externa: mesmo com bilhões de chaves, altura mínima → poucos seeks.' },
+
+      /* --------- NOVO: buscando a chave (algoritmo do PDF, minha versão) --------- */
+      { title:'Algoritmo de busca — dois níveis',
+        body:'Repare que a busca acontece em <strong>dois estágios</strong>: entre páginas (baixando o nível) e <em>dentro</em> da página (procurando a chave). Cada nível baixado = um acesso ao disco.',
+        code:`search(RRN, chave):
+    se RRN é NIL → retorna NAO_ACHOU
+    lê a página RRN do disco em PAGE
+    procura chave em PAGE, guardando POS
+    se chave encontrada → retorna (ACHOU, RRN, POS)
+    senão → search(PAGE.CHILD[POS], chave)`,
+        note:'Fica recursivo, mas em C você geralmente escreve iterativo — só precisa manter o RRN da página atual e o POS onde a chave "encaixa".' },
+
       /* --------- Busca --------- */
       { title:'Busca — o algoritmo',
         body:'Começa na raiz. Dentro do nó, percorre as chaves ordenadas até achar uma ≥ alvo. Se for igual, achou. Se não, desce pro filho da posição.',
@@ -1502,15 +1544,108 @@ raiz:      [30, 50, 60]
         </table>`,
         note:'Para ordem par (4, 6...) as duas convenções dão a mesma resposta. Para ordem ímpar (3, 5...), pode diferir em uma posição. Na prática, ambas geram árvores B válidas. Na dúvida, prefira o meio-esquerda.' },
 
-      /* --------- Remoção (leve) --------- */
-      { title:'Remoção — a visão geral',
-        body:'Remoção é a operação mais complicada — não vou detalhar aqui. A ideia:',
-        html:`<ol class="slide-list numbered">
-          <li>Se a chave está em uma folha e a folha ficaria com o mínimo de chaves ainda respeitado → só apaga.</li>
-          <li>Se a chave está em nó interno → substitui pelo sucessor imediato (menor chave da subárvore direita) e apaga da folha original.</li>
-          <li>Se apagar deixaria o nó abaixo do mínimo → <strong>redistribui</strong> com o irmão (empresta uma chave) ou <strong>funde</strong> irmãos + puxa uma chave do pai.</li>
-        </ol>`,
-        note:'Fusão pode se propagar pra cima também, encurtando a árvore em 1 nível. Simétrico do split.' },
+      /* --------- REMOÇÃO — série completa de slides --------- */
+      { title:'Remoção — a operação mais complexa',
+        body:'A remoção precisa <strong>manter as propriedades da árvore</strong>: mínimo de chaves por nó, folhas no mesmo nível. Existem 6 casos possíveis, do mais simples ao mais complicado.',
+        html:`<ul class="slide-list">
+          <li>Caso 1 — remoção simples em folha</li>
+          <li>Caso 2 — remoção em nó interno</li>
+          <li>Caso 3 — underflow + redistribuição possível</li>
+          <li>Caso 4 — underflow + precisa concatenar</li>
+          <li>Caso 5 — concatenação causa underflow no pai (efeito cascata)</li>
+          <li>Caso 6 — a árvore diminui de altura</li>
+        </ul>`,
+        note:'A regra geral: <strong>sempre remove de folha</strong>. Se a chave está em nó interno, troca com um vizinho (predecessor ou sucessor) que está em folha e remove de lá.' },
+
+      { title:'Caso 1 — remoção simples em folha',
+        body:'A folha tem chaves de sobra (acima do mínimo). Basta remover a chave e reorganizar as restantes.',
+        code:`Antes (ordem 5, mín = 2, máx = 4):
+    [A, B, D, F]     ← 4 chaves, remover B
+
+Remove B → [A, D, F]     ← 3 chaves, acima do mínimo ✓
+
+Nenhuma outra operação necessária.`,
+        note:'É o cenário ideal. Nenhum split reverso, nenhuma redistribuição. Ocorre na maioria das remoções em árvores bem preenchidas.' },
+
+      { title:'Caso 2 — chave em nó interno',
+        body:'Remoções sempre acontecem em folha. Se você quer remover uma chave que está num nó interno, primeiro precisa <strong>trocar</strong> com um vizinho de folha.',
+        code:`raiz:      [M]                              raiz:      [L]
+          /   \\        remover M          /   \\
+     [A,L]  [P,S]     ─────────────▶   [A]   [P,S]
+                       troca com predecessor L
+                       (maior chave da subárvore esquerda)
+
+Depois:  raiz [L], remove M da folha [A, L] → folha [A]
+
+Alternativa: usar SUCESSOR (menor chave da subárvore direita)`,
+        note:'Ambas as escolhas (predecessor ou sucessor) funcionam. Meu interativo usa o predecessor. Depois da troca, o problema vira o Caso 1 (remoção em folha).' },
+
+      { title:'Caso 3 — underflow + redistribuição',
+        body:'A remoção deixaria a folha <strong>abaixo do mínimo</strong>. Se um irmão adjacente (mesmo pai) tem chaves de sobra, você <strong>toma emprestada</strong> uma chave dele via o pai.',
+        code:`Ordem 5 → mín 2, máx 4.
+
+Antes:
+        [M]                         Depois de remover A:
+       /   \\                              [D]
+   [A,B] [D,F,H]                          /  \\
+                                       [B]  [F,H]
+                                       ↑ M subiu de D e D desceu
+
+Mecânica: o pai "roda" — chave separadora M vira parte da
+folha esquerda, e uma chave do irmão direito sobe pro pai.`,
+        note:'Redistribuição preserva a altura da árvore. Só reorganiza chaves entre folha, pai e irmão. Barato.' },
+
+      { title:'Caso 4 — underflow + concatenação',
+        body:'A folha ficou abaixo do mínimo <strong>e nenhum irmão tem chaves de sobra</strong>. Solução: <strong>funde</strong> a folha com um irmão + a chave separadora do pai.',
+        code:`Ordem 5 → mín 2. Ambas as folhas estão no mínimo.
+
+Antes:                       Depois de remover A:
+        [M]
+       /   \\                     concatenação:
+   [A,B] [F,G]                   [B, M, F, G]
+   (mín)  (mín)                  ↑ B + M (separador do pai) + F,G
+
+Uma página é liberada, chave separadora sai do pai.`,
+        note:'Concatenação é o processo <strong>inverso</strong> do split. Duas páginas viram uma. O pai perde uma chave — o que pode causar problema no pai (Caso 5).' },
+
+      { title:'Caso 5 — concatenação em cascata',
+        body:'A concatenação no filho tirou uma chave do pai. Se o pai ficou <strong>abaixo do mínimo</strong>, o problema propaga pra cima — pode virar Caso 3 (redistribuição no pai) ou Caso 4 (concatenação no pai) recursivamente.',
+        code:`Cascata:
+    remoção em folha
+    → underflow na folha
+       → concatena com irmão (Caso 4)
+          → pai perde uma chave
+             → underflow no pai
+                → redistribui ou concatena com tio (recursivo)
+                   → avô perde uma chave
+                      → ... até chegar na raiz`,
+        note:'É o "gêmeo malvado" do split em cascata da inserção. Assim como split pode fazer a árvore crescer, cascata de concatenação pode fazer diminuir (Caso 6).' },
+
+      { title:'Caso 6 — árvore diminui de altura',
+        body:'A cascata chegou até a raiz. Se a raiz ficou com <strong>zero chaves</strong>, ela some — seu único filho vira a nova raiz. A altura da árvore diminui em 1.',
+        code:`Antes:              Depois da concatenação da raiz:
+    [M]
+   /   \\                       [A, B, F, G]
+[A,B] [F,G]                     ↑ nova raiz (ex-filha único)
+
+A raiz [M] foi apagada porque perdeu sua única chave.
+Seu filho remanescente virou a nova raiz.`,
+        note:'É a única forma da árvore B <strong>encolher</strong> em altura. Simétrico exato de como cresce (split na raiz).' },
+
+      { title:'Algoritmo resumido de remoção',
+        body:'Juntando tudo, o pseudocódigo geral fica:',
+        code:`remove(chave):
+    1. Se chave está em nó interno:
+         troca com predecessor (ou sucessor) da folha
+    2. Remove chave da folha
+    3. Se folha ainda tem ≥ mín → PRONTO
+    4. Se folha ficou 1 abaixo do mínimo:
+         4.1 Se algum irmão tem > mín → REDISTRIBUI
+         4.2 Senão → CONCATENA com um irmão + chave separadora do pai
+    5. Se concatenou:
+         se pai também ficou < mín → recursivo a partir do passo 4 no pai
+    6. Se raiz ficou com 0 chaves → altura diminui`,
+        note:'O interativo abaixo já implementa esse algoritmo. Use a caixa "Remover" pra testar cada caso — o histórico mostra qual foi acionado.' },
 
       /* --------- B+ --------- */
       { title:'Árvore B+ — a variante que os bancos amam',
